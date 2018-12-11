@@ -1,0 +1,18 @@
+Package: tpcaMonitoring
+Type: Package
+Title: Simulation Study for Changepoint Detection by TPCA.
+Version: 0.0.0.9001
+Author: Martin Tveten
+Maintainer: Martin Tveten <martintv@uio.no>
+Description: This package contains all code used to perform
+    a simulation study of TPCA's ability to detect 
+    changepoints in a high-dimensional data stream.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports:
+    tpca (>= 0.0.0.9000),
+    assertthat (>= 0.2.0),
+    ggplot2 (>= 2.2.1),
+    reshape2 (>= 1.4.3)
+Depends: R (>= 3.4.0)
