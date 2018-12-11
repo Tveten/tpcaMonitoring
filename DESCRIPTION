@@ -11,8 +11,10 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Imports:
-    tpca (>= 0.0.0.9000),
+    doParallel (>= 1.0),
     assertthat (>= 0.2.0),
     ggplot2 (>= 2.2.1),
     reshape2 (>= 1.4.3)
 Depends: R (>= 3.4.0)
+Remotes: Tveten/tpca
+Suggests: testthat
