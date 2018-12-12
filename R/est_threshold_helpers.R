@@ -5,14 +5,14 @@ rowVars <- function(x) {
 }
 
 rowSds <- function(x) {
-  sqrt(rowVar(x))
+  sqrt(rowVars(x))
 }
 
 get_training_data <- function(x) {
   if (is.list(x)) {
     x_true_mean <- rep(0, x$d)
     x_true_cor_mat <- tpca::rcor_mat(x$d)
-    x_train <- t(mvrnorm(x$m, x_mean_true, x_cor_mat_true))
+    x_train <- t(mvrnorm(x$m, x_true_mean, x_true_cor_mat))
   } else if (is.matrix(x)) {
     x_train <- x
   } else {
