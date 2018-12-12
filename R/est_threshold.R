@@ -21,7 +21,7 @@
 #'
 #' @export
 
-tpca_arl <- function(x, threshold, axes, n, n_sim) {
+tpca_arl <- function(x, threshold, axes, n_mon, n_sim) {
   x_train <- get_training_data(x)
   x_mean <- rowMeans(x_train)
   x_sd <- rowSds(x_train)
