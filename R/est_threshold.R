@@ -4,6 +4,7 @@
 #'
 #' Details
 #'
+#' @param x The d x m training data matrix, where d is the dimension of the data and m the number of training samples, or a list(d = ., m = .) describing the dimensions of normal training data to be drawn.
 #' @param threshold A numeric specifying the threshold value for when a change
 #'   is declared.
 #' @param d The dimension of the original data stream.
