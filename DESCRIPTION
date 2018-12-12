@@ -18,3 +18,4 @@ Imports:
 Depends: R (>= 3.4.0)
 Remotes: Tveten/tpca
 Suggests: testthat
+RoxygenNote: 6.1.1
