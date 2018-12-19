@@ -21,25 +21,49 @@
 #'
 #' @export
 
-tpca_arl <- function(x, threshold, axes, n_mon, n_sim) {
-  x_train <- get_training_data(x)
-  x_mean <- rowMeans(x_train)
-  x_sd <- rowSds(x_train)
-  x_train <- (x_train - x_mean) / x_sd
-  m <- ncol(x_train)
-  d <- nrow(x_train)
+tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
+  m <- attr(Sigma_x, 'n_obs')
+  d <- length(mu_x)
   r <- length(axes)
+  run_lengths <- rep(0, n_sim)
+  for (b in 1:n_sim) {
+    x_train <- t(MASS::mvrnorm(m, mu = mu_x, Sigma = Sigma_x))
+    mu_hat <- rowMeans(x_train)
+    sigma_hat <- rowSds(x_train)
+    x_train <- (x_train - mu_hat) / sigma_hat
 
-  x_cor_mat <- 1 / (m - 1) * x_train %*% t(x_train)
-  V <- tpca::pca(x_cor_mat, axes = axes)$vectors
-  y_train <- V %*% x_train
+    cor_mat_hat <- 1 / (m - 1) * x_train%*% t(x_train)
+    pca_obj <- tpca::pca(cor_mat_hat, axes = axes)
+    V <- pca_obj$vectors
+    lambda <- pca_obj$values
+
+    z_train <- V %*% x_train / sqrt(lambda)
+    mu_z <- 1 / sqrt(lambda) * V %*% ((mu_x - mu_hat) / sigma_hat)
+    D <- diag(1 / sigma_hat)
+    sigma2_z <- 1 / lambda * diag(V %*% (D %*% Sigma_x %*% D) %*% t(V))
+
+    z <- t(MASS::mvrnorm(n, mu = mu_z, Sigma = diag(sigma2_z)))
+    t <- 1
+    sums <- init_sums(z_train, z[, t], n)
+    detection_stat <- 0
+    while ((detection_stat < threshold) & (t < n)) {
+      t <- t + 1
+      sums <- update_sums(sums, z[, t], m, t)
+      log_liks <- mixture_log_liks(sums, m, t, w, 1)
+      detection_stat <- max(log_liks, na.rm = TRUE)
+    }
+    run_lengths[b] <- t
+  }
+  arl_est <- n / mean(as.numeric(run_lengths < n))
+  arl_est
+  # log_liks
 }
 
 #' Estimating the threshold for tpca changepoint detection
 #'
 #' Description
 #'
-#' \code{rel_tol} and \code{alpha} governs the number of simulations used in
+#' \code{rel_tol} and \code{thresh_alpha} governs the number of simulations used in
 #' each step of the algorithm towards a more and more certain estimate.
 #' At each step, the number of simulations is chosen so that
 #' \code{[(1 - rel_tol)arl, (1 + rel_tol)arl]} approximately covers the true
@@ -68,10 +92,10 @@ tpca_arl <- function(x, threshold, axes, n_mon, n_sim) {
 #'
 #' @export
 
-est_tpca_threshold <- function(x, axes, arl,
+est_tpca_threshold <- function(x, axes, n, alpha,
                                w             = 200,
                                rel_tol       = c(0.2, 0.1, 0.05, 0.025),
-                               alpha         = 0.05,
+                               thresh_alpha  = 0.05,
                                init_value    = NULL,
                                learning_coef = NULL) {
 
@@ -142,18 +166,18 @@ est_tpca_threshold <- function(x, axes, arl,
 
   }
 
-  geom_conf_int <- function(mean_est, n, alpha) {
+  geom_conf_int <- function(mean_est, n, thresh_alpha) {
     p_est <- 1 / mean_est
     sd_est <- sqrt((1 - p_est) / p_est^2)
-    quartile <- qnorm((1 - alpha / 2))
+    quartile <- qnorm((1 - thresh_alpha / 2))
     lower <- mean_est - quartile * sd_est / sqrt(n)
     upper <- mean_est + quartile * sd_est / sqrt(n)
     conf_int <- c(lower, upper)
     return(conf_int)
   }
 
-  get_n_sim <- function(alpha, rel_tol) {
-    z <- qnorm(1 - alpha / 2)
+  get_n_sim <- function(thresh_alpha, rel_tol) {
+    z <- qnorm(1 - thresh_alpha / 2)
     n_sim <- (z / rel_tol)^2
     return(round(n_sim))
   }
@@ -170,12 +194,16 @@ est_tpca_threshold <- function(x, axes, arl,
     threshold * (1 + threshold_change)
   }
 
-  d <- x$d
-  m <- x$m
+  d <- nrow(x)
+  m <- ncol(x)
+  mu_x <- rowMeans(x)
+  Sigma_x <- 1 / (m - 1) * x %*% t(x)
+  attr(Sigma_x, 'n_obs') <- m
+
   r <- length(axes)
-  n_sim <- get_n_sim(alpha, rel_tol)
+  n_sim <- get_n_sim(thresh_alpha, rel_tol)
   threshold <- init_threshold(r)
-  n_mon <- 0.05 * arl
+  arl <- n / alpha
 
   log_file <- set_log_name()
   results_file <- set_results_name()
@@ -192,10 +220,10 @@ est_tpca_threshold <- function(x, axes, arl,
     log_next_stage(rel_tol[k])
     while (!is_in_interval(arl, arl_conf_int) && (n_retries <= max_retries)) {
       log_current(n_sim[k], threshold)
-      arl_est <- tpca_arl(x, threshold, axes, n_mon, n_sim[k])
-      arl_conf_int <- geom_conf_int(arl_est, n_sim[k], alpha)
+      arl_est <- tpca_arl(threshold, mu_x, Sigma_x, axes, n, w, n_sim[k])
+      arl_conf_int <- geom_conf_int(arl_est, n_sim[k], thresh_alpha)
       log_results(arl_est, threshold)
-      store_results(n_sim, threshold, arl_est, arl_conf_int)
+      store_results(n_sim[k], threshold, arl_est, arl_conf_int)
 
       if (!is_in_interval(arl, arl_conf_int))
         threshold <- update_threshold(threshold, rel_tol[k], arl, arl_est)
