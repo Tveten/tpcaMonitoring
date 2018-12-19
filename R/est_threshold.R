@@ -4,13 +4,10 @@
 #'
 #' Details
 #'
-#' @param x The d x m training data matrix, where d is the dimension of the data and m the number of training samples, or a list(d = ., m = .) describing the dimensions of normal training data to be drawn.
 #' @param threshold A numeric specifying the threshold value for when a change
 #'   is declared.
-#' @param d The dimension of the original data stream.
-#' @param r The dimension of the reduced data stream, i.e.
-#'   the number of principal axes to project onto.
-#' @param m The size of the training set.
+#' @param mu_x A mean vector estimated from training data, representing the null distribution.
+#' @param Sigma_x A covariance matrix estimated from training data, representing the null distribution.
 #' @param n The number of observations to monitor for an estimate of the ARL.
 #'   See details.
 #' @param w The window size. Number of recent time-points to consider for a
@@ -56,31 +53,40 @@ tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
   }
   arl_est <- n / mean(as.numeric(run_lengths < n))
   arl_est
-  # log_liks
 }
 
 #' Estimating the threshold for tpca changepoint detection
 #'
 #' Description
 #'
+#' \code{n} and \code{alpha} governs the false alarm rate by the relation
+#'   P(T < n | H_0) <= \code{alpha}.
+#' The corresponding average run length (\code{arl}) is approximately given by n / alpha.
+#'
 #' \code{rel_tol} and \code{thresh_alpha} governs the number of simulations used in
 #' each step of the algorithm towards a more and more certain estimate.
 #' At each step, the number of simulations is chosen so that
 #' \code{[(1 - rel_tol)arl, (1 + rel_tol)arl]} approximately covers the true
-#' average run length at confidence level \code{alpha}.
+#' average run length at confidence level \code{thresh_alpha}.
 #' For example, when the last \code{rel_tol} is 0.025, it means that the final
 #' estimated threshold corresponds to an average run length of approximately
-#' \code{arl} +- 0.025 * \code{arl} at confidence level \code{alpha}.
+#' \code{arl} +- 0.025 * \code{arl} at confidence level \code{thresh_alpha}.
 #' The algorithm should start with a large relative error tolerance,
 #' and then narrow it down for the quickest convergence.
 #'
 #' @param x The d x m training data matrix, where d is the dimension of the data
-#'   and m the number of training samples, or a list(d = ., m = .) describing
-#'   the dimensions of normal training data to be drawn.
+#'   and m the number of training samples
 #' @param axes Indices of the principal axes to be used in simulations.
+#' @param n The length of the segment to monitor for false alarms. See details.
+#' @param alpha Probability of type I error (false alarm) within the time window . See details.
+#' @param w The window size (an integer).
 #' @param rel_tol A vector with the sequence of relative error tolerances
 #'   allowed at each step towards convergence in the algorithm. See details.
-#' @param alpha 1 - alpha is the confidence level. See details.
+#' @param thresh_alpha 1 - \code{thresh_alpha} is the confidence level. See details.
+#' @param init_thresh Use if a custom initial value for the threshold is wanted.
+#' @param learning_coef The learning rate is defined as \code{rel_tol} /
+#' \code{learning_coef}. The default \code{learning_coef} is 3, which has
+#' been found a good choice after a lot of experimenting.
 #'
 #' @return A list with the following components:
 #' \describe{
@@ -96,7 +102,7 @@ est_tpca_threshold <- function(x, axes, n, alpha,
                                w             = 200,
                                rel_tol       = c(0.2, 0.1, 0.05, 0.025),
                                thresh_alpha  = 0.05,
-                               init_value    = NULL,
+                               init_thresh   = NULL,
                                learning_coef = NULL) {
 
   set_log_name <- function() {
@@ -183,8 +189,8 @@ est_tpca_threshold <- function(x, axes, n, alpha,
   }
 
   init_threshold <- function(r) {
-    if (is.null(init_value)) return(9 + 1.2 * r)
-    else return(init_value)
+    if (is.null(init_thresh)) return(9 + 1.2 * r)
+    else return(init_thresh)
   }
 
   update_threshold <- function(threshold, rel_tol, arl, arl_est) {

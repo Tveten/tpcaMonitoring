@@ -4,28 +4,23 @@
 \alias{tpca_arl}
 \title{Estimates average run length (ARL) for monitoring by tpca}
 \usage{
-tpca_arl(x, threshold, axes, n, n_sim)
+tpca_arl(threshold, mu_x, Sigma_x, axes, n, w, n_sim)
 }
 \arguments{
-\item{x}{The d x m training data matrix, where d is the dimension of the data and m the number of training samples, or a list(d = ., m = .) describing the dimensions of normal training data to be drawn.}
-
 \item{threshold}{A numeric specifying the threshold value for when a change
 is declared.}
+
+\item{mu_x}{A mean vector estimated from training data, representing the null distribution.}
+
+\item{Sigma_x}{A covariance matrix estimated from training data, representing the null distribution.}
 
 \item{n}{The number of observations to monitor for an estimate of the ARL.
 See details.}
 
-\item{n_sim}{The number of simulations to base the estimate on.}
-
-\item{d}{The dimension of the original data stream.}
-
-\item{r}{The dimension of the reduced data stream, i.e.
-the number of principal axes to project onto.}
-
-\item{m}{The size of the training set.}
-
 \item{w}{The window size. Number of recent time-points to consider for a
 change.}
+
+\item{n_sim}{The number of simulations to base the estimate on.}
 }
 \value{
 An estimate of the average run length.
