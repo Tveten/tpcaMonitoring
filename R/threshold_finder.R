@@ -167,6 +167,7 @@ threshold_finder <- function(x, mon_type, n, alpha,
   }
 
   # TODO: Error handling: Either axes or p0 must be supplied.
+  # TODO: Update log and result functions.
 
   start_time <- proc.time()[3] / 60
   d <- nrow(x)
