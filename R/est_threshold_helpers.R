@@ -8,14 +8,43 @@ rowSds <- function(x) {
   sqrt(rowVars(x))
 }
 
-get_training_data <- function(x) {
-  if (is.list(x)) {
-    x_true_mean <- rep(0, x$d)
-    x_true_cor_mat <- tpca::rcor_mat(x$d)
-    x_train <- t(mvrnorm(x$m, x_true_mean, x_true_cor_mat))
-  } else if (is.matrix(x)) {
-    x_train <- x
-  } else {
-    stop('x must be either a matrix with training data, or a list(d = ., m = .) where d is the dimension of the data and m the number of training samples.')
-  }
+boot_z_train <- function(m, mu_x, Sigma_x, axes) {
+  x_train <- t(MASS::mvrnorm(m, mu = mu_x, Sigma = Sigma_x))
+  mu_hat <- rowMeans(x_train)
+  sigma_hat <- rowSds(x_train)
+  x_train <- (x_train - mu_hat) / sigma_hat
+
+  cor_mat_hat <- 1 / (m - 1) * x_train%*% t(x_train)
+  pca_obj <- tpca::pca(cor_mat_hat, axes = axes)
+  V <- pca_obj$vectors
+  lambda <- pca_obj$values
+
+  z_train <- V %*% x_train / sqrt(lambda)
+  mu_z <- 1 / sqrt(lambda) * V %*% ((mu_x - mu_hat) / sigma_hat)
+  D <- diag(1 / sigma_hat)
+  sigma2_z <- 1 / lambda * diag(V %*% (D %*% Sigma_x %*% D) %*% t(V))
+  return(list('data'   = z_train,
+              'mu'     = mu_z,
+              'sigma2' = sigma2_z))
+}
+
+boot_z_train_np <- function(x, axes) {
+  m <- ncol(x)
+  x_train <- x[, sample(1:m, m, replace = TRUE)]
+  mu_hat <- rowMeans(x_train)
+  sigma_hat <- rowSds(x_train)
+  x_train <- (x_train - mu_hat) / sigma_hat
+
+  cor_mat_hat <- 1 / (m - 1) * x_train%*% t(x_train)
+  pca_obj <- tpca::pca(cor_mat_hat, axes = axes)
+  V <- pca_obj$vectors
+  lambda <- pca_obj$values
+
+  z_train <- V %*% x_train / sqrt(lambda)
+  mu_z <- 1 / sqrt(lambda) * V %*% ((mu_x - mu_hat) / sigma_hat)
+  D <- diag(1 / sigma_hat)
+  sigma2_z <- 1 / lambda * diag(V %*% (D %*% Sigma_x %*% D) %*% t(V))
+  return(list('data'   = z_train,
+              'mu'     = mu_z,
+              'sigma2' = sigma2_z))
 }
