@@ -22,35 +22,26 @@ tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
   m <- attr(Sigma_x, 'n_obs')
   d <- length(mu_x)
   r <- length(axes)
-  run_lengths <- rep(0, n_sim)
-  for (b in 1:n_sim) {
-    x_train <- t(MASS::mvrnorm(m, mu = mu_x, Sigma = Sigma_x))
-    mu_hat <- rowMeans(x_train)
-    sigma_hat <- rowSds(x_train)
-    x_train <- (x_train - mu_hat) / sigma_hat
-
-    cor_mat_hat <- 1 / (m - 1) * x_train%*% t(x_train)
-    pca_obj <- tpca::pca(cor_mat_hat, axes = axes)
-    V <- pca_obj$vectors
-    lambda <- pca_obj$values
-
-    z_train <- V %*% x_train / sqrt(lambda)
-    mu_z <- 1 / sqrt(lambda) * V %*% ((mu_x - mu_hat) / sigma_hat)
-    D <- diag(1 / sigma_hat)
-    sigma2_z <- 1 / lambda * diag(V %*% (D %*% Sigma_x %*% D) %*% t(V))
-
-    z <- t(MASS::mvrnorm(n, mu = mu_z, Sigma = diag(sigma2_z)))
+  # TODO: Parallelize.
+  n_cores <- parallel::detectCores()
+  c1 <- parallel::makeCluster(n_cores - 1, outfile = '', type = 'PSOCK')
+  doParallel::registerDoParallel(c1)
+  `%dopar%` <- foreach::`%dopar%`
+  run_lengths <- foreach::foreach(b = 1:n_sim, .combine = 'c') %dopar% {
+    z_train <- boot_z_train(m, mu_x, Sigma_x, axes)
+    z <- gen_norm_data(n, mu = z_train$mu, Sigma = diag(z_train$sigma2))
     t <- 1
-    sums <- init_sums(z_train, z[, t], n)
+    sums <- init_sums(z_train$data, z[, t], n)
     detection_stat <- 0
     while ((detection_stat < threshold) & (t < n)) {
       t <- t + 1
-      sums <- update_sums(sums, z[, t], m, t)
-      log_liks <- mixture_log_liks(sums, m, t, w, 1)
-      detection_stat <- max(log_liks, na.rm = TRUE)
+      sums <- update_sumsC(sums, z[, t], m, t)
+      log_liks <- mixture_log_liksC(sums, m, t, w, 1)
+      detection_stat <- max(log_liks)
     }
-    run_lengths[b] <- t
+    t
   }
+  parallel::stopCluster(c1)
   arl_est <- n / mean(as.numeric(run_lengths < n))
   arl_est
 }
@@ -92,22 +83,22 @@ tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
 #' \describe{
 #'   \item{\code{threshold}}{The final estimate }
 #' }
-#' \code{est_tpca_threshold} also creates a .txt file with each line showing
+#' \code{tpca_threshold} also creates a .txt file with each line showing
 #' summaries of each step in the estimation procedure. The last line corresponds
 #' to the final estimate.
 #'
 #' @export
 
-est_tpca_threshold <- function(x, axes, n, alpha,
-                               w             = 200,
-                               rel_tol       = c(0.2, 0.1, 0.05, 0.025),
-                               thresh_alpha  = 0.05,
-                               init_thresh   = NULL,
-                               learning_coef = NULL) {
+tpca_threshold <- function(x, axes, n, alpha,
+                           w             = 200,
+                           rel_tol       = c(0.2, 0.1, 0.05, 0.025),
+                           thresh_alpha  = 0.05,
+                           init_thresh   = NULL,
+                           learning_coef = NULL) {
 
   set_log_name <- function() {
     files_in_wdir <- list.files()
-    root_name <- paste0('est_tpca_threshold_log_',
+    root_name <- paste0('tpca_threshold_log_',
                         'm', as.character(m),
                         'd', as.character(d),
                         'r', as.character(r))
@@ -146,7 +137,10 @@ est_tpca_threshold <- function(x, axes, n, alpha,
   }
 
   log_results <- function(arl_est, threshold) {
-    write(sprintf('Result:    ARL       = %.0f', arl_est), file = log_file, append = TRUE)
+    curr_time <- proc.time()[3] / 60
+    write(sprintf('Result:    ARL       = %.0f, %.1f min used.',
+                  arl_est, curr_time - start_time),
+          file = log_file, append = TRUE)
   }
 
   init_log_file <- function() {
@@ -200,6 +194,7 @@ est_tpca_threshold <- function(x, axes, n, alpha,
     threshold * (1 + threshold_change)
   }
 
+  start_time <- proc.time()[3] / 60
   d <- nrow(x)
   m <- ncol(x)
   mu_x <- rowMeans(x)
