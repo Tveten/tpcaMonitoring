@@ -1,7 +1,3 @@
-library(MASS)
-library(clusterGeneration)
-library(Matrix)
-
 gen_ind_data <- function(d, stream_length,
                          K = 0, kappa = 0, mu = 0, sigma2 = 1) {
   # Generates all relevant different data streams.
@@ -69,3 +65,6 @@ generate_cor_data <- function(N, stream.length, K0 = N,
     return(X)
 }
 
+gen_norm_data <- function(n, mu, Sigma) {
+  t(MASS::mvrnorm(n, mu = mu, Sigma = Sigma))
+}
