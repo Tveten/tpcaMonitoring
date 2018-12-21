@@ -1,11 +1,11 @@
-test_est_threshold <- function(d, r, m) {
+test_tpca_threshold <- function(d, r, m) {
   mu <- rep(0, d)
   Sigma <- tpca::rcov_mat(d, range_sd = c(0.5, 2))
   x <- t(MASS::mvrnorm(m, mu = mu, Sigma = Sigma))
   axes <- (d - r + 1):d
   n <- 500
   alpha <- 0.05
-  tpca_threshold(x, axes, n, alpha)
+  threshold_finder(x, 'tpca', n, alpha, axes = axes)
 }
 
 test_tpca_arl <- function(data_dim) {

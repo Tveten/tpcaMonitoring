@@ -9,7 +9,7 @@ rowSds <- function(x) {
 }
 
 boot_z_train <- function(m, mu_x, Sigma_x, axes) {
-  x_train <- t(MASS::mvrnorm(m, mu = mu_x, Sigma = Sigma_x))
+  x_train <- gen_norm_data(m, mu_x, Sigma_x)
   mu_hat <- rowMeans(x_train)
   sigma_hat <- rowSds(x_train)
   x_train <- (x_train - mu_hat) / sigma_hat

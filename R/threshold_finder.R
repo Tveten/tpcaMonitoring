@@ -1,51 +1,3 @@
-#' Estimates average run length (ARL) for monitoring by tpca
-#'
-#' Description
-#'
-#' Details
-#'
-#' @param threshold A numeric specifying the threshold value for when a change
-#'   is declared.
-#' @param mu_x A mean vector estimated from training data, representing the null distribution.
-#' @param Sigma_x A covariance matrix estimated from training data, representing the null distribution.
-#' @param n The number of observations to monitor for an estimate of the ARL.
-#'   See details.
-#' @param w The window size. Number of recent time-points to consider for a
-#'   change.
-#' @param n_sim The number of simulations to base the estimate on.
-#'
-#' @return An estimate of the average run length.
-#'
-#' @export
-
-tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
-  m <- attr(Sigma_x, 'n_obs')
-  d <- length(mu_x)
-  r <- length(axes)
-  # TODO: Parallelize.
-  n_cores <- parallel::detectCores()
-  c1 <- parallel::makeCluster(n_cores - 1, outfile = '', type = 'PSOCK')
-  doParallel::registerDoParallel(c1)
-  `%dopar%` <- foreach::`%dopar%`
-  run_lengths <- foreach::foreach(b = 1:n_sim, .combine = 'c') %dopar% {
-    z_train <- boot_z_train(m, mu_x, Sigma_x, axes)
-    z <- gen_norm_data(n, mu = z_train$mu, Sigma = diag(z_train$sigma2))
-    t <- 1
-    sums <- init_sums(z_train$data, z[, t], n)
-    detection_stat <- 0
-    while ((detection_stat < threshold) & (t < n)) {
-      t <- t + 1
-      sums <- update_sumsC(sums, z[, t], m, t)
-      log_liks <- mixture_log_liksC(sums, m, t, w, 1)
-      detection_stat <- max(log_liks)
-    }
-    t
-  }
-  parallel::stopCluster(c1)
-  arl_est <- n / mean(as.numeric(run_lengths < n))
-  arl_est
-}
-
 #' Estimating the threshold for tpca changepoint detection
 #'
 #' Description
@@ -67,9 +19,14 @@ tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
 #'
 #' @param x The d x m training data matrix, where d is the dimension of the data
 #'   and m the number of training samples
-#' @param axes Indices of the principal axes to be used in simulations.
+#' @param mon_type Character string signifying which type of monitoring statistic to
+#'   find the threshold for. Available options: "tpca" and "mixture".
 #' @param n The length of the segment to monitor for false alarms. See details.
 #' @param alpha Probability of type I error (false alarm) within the time window . See details.
+#' @param axes Indices of the principal axes to be used in simulations.
+#'   MUST be supplied if mon_type == 'tpca'.
+#' @param p0 The mixture probability of a dimension being affected by a change.
+#'   MUST be supplied if mon_type == 'mixture'.
 #' @param w The window size (an integer).
 #' @param rel_tol A vector with the sequence of relative error tolerances
 #'   allowed at each step towards convergence in the algorithm. See details.
@@ -89,12 +46,14 @@ tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
 #'
 #' @export
 
-tpca_threshold <- function(x, axes, n, alpha,
-                           w             = 200,
-                           rel_tol       = c(0.2, 0.1, 0.05, 0.025),
-                           thresh_alpha  = 0.05,
-                           init_thresh   = NULL,
-                           learning_coef = NULL) {
+threshold_finder <- function(x, mon_type, n, alpha,
+                             axes          = NULL,
+                             p0            = NULL,
+                             w             = 200,
+                             rel_tol       = c(0.2, 0.1, 0.05, 0.025),
+                             thresh_alpha  = 0.05,
+                             init_thresh   = NULL,
+                             learning_coef = NULL) {
 
   set_log_name <- function() {
     files_in_wdir <- list.files()
@@ -194,6 +153,21 @@ tpca_threshold <- function(x, axes, n, alpha,
     threshold * (1 + threshold_change)
   }
 
+  get_arl_func <- function(mon_type) {
+    if (mon_type == 'tpca') {
+      arl_func <- function(threshold, n_sim)
+        tpca_arl(threshold, mu_x, Sigma_x, axes, n, w, n_sim)
+    } else if (mon_type == 'mixture') {
+      arl_func <- function(threshold, n_sim)
+        mixture_arl(threshold, m, d, p0, n, w, n_sim)
+    } else {
+      stop('Invalid mon_type. Use "tpca" or "mixture".')
+    }
+    arl_func
+  }
+
+  # TODO: Error handling: Either axes or p0 must be supplied.
+
   start_time <- proc.time()[3] / 60
   d <- nrow(x)
   m <- ncol(x)
@@ -205,6 +179,7 @@ tpca_threshold <- function(x, axes, n, alpha,
   n_sim <- get_n_sim(thresh_alpha, rel_tol)
   threshold <- init_threshold(r)
   arl <- n / alpha
+  arl_func <- get_arl_func(mon_type)
 
   log_file <- set_log_name()
   results_file <- set_results_name()
@@ -221,7 +196,7 @@ tpca_threshold <- function(x, axes, n, alpha,
     log_next_stage(rel_tol[k])
     while (!is_in_interval(arl, arl_conf_int) && (n_retries <= max_retries)) {
       log_current(n_sim[k], threshold)
-      arl_est <- tpca_arl(threshold, mu_x, Sigma_x, axes, n, w, n_sim[k])
+      arl_est <- arl_func(threshold, n_sim[k])
       arl_conf_int <- geom_conf_int(arl_est, n_sim[k], thresh_alpha)
       log_results(arl_est, threshold)
       store_results(n_sim[k], threshold, arl_est, arl_conf_int)
