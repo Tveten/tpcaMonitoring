@@ -55,28 +55,30 @@ threshold_finder <- function(x, mon_type, n, alpha,
                              init_thresh   = NULL,
                              learning_coef = NULL) {
 
-  set_log_name <- function() {
+  set_file_name <- function(file_type) {
     files_in_wdir <- list.files()
-    root_name <- paste0('tpca_threshold_log_',
+    root_name <- paste0(mon_type, '_threshold_', file_type, '_',
                         'm', as.character(m),
-                        'd', as.character(d),
-                        'r', as.character(r))
+                        'd', as.character(d))
+    if (mon_type == 'tpca') root_name <- paste0(root_name, 'ax',
+                                                as.character(min(axes)), '-',
+                                                as.character(max(axes)))
+    if (mon_type == 'mixture') {
+      p0_str <- paste0(strsplit(as.character(p0), '[.]')[[1]], collapse = '')
+      root_name <- paste0(root_name, 'p0-', p0_str)
+    }
     n_logs <- sum(grepl(root_name, files_in_wdir))
     if (n_logs > 0)
       root_name <- paste0(root_name, '(', as.character(n_logs + 1), ')')
     paste0(root_name, '.txt')
   }
 
+  set_log_name <- function() {
+    set_file_name('log')
+  }
+
   set_results_name <- function() {
-    files_in_wdir <- list.files()
-    root_name <- paste0('tpca_threshold_results_',
-                        'm', as.character(m),
-                        'd', as.character(d),
-                        'r', as.character(r))
-    n_logs <- sum(grepl(root_name, files_in_wdir))
-    if (n_logs > 0)
-      root_name <- paste0(root_name, '(', as.character(n_logs + 1), ')')
-    paste0(root_name, '.txt')
+    set_file_name('results')
   }
 
   log_next_stage <- function(rel_tol) {
@@ -104,14 +106,22 @@ threshold_finder <- function(x, mon_type, n, alpha,
 
   init_log_file <- function() {
     write(sprintf('Data dimension             = %.0f', d), file = log_file, append = TRUE)
-    write(sprintf('Reduced dimension          = %.0f', r), file = log_file, append = TRUE)
-    write(paste0('Axes                       = ', paste(axes, collapse = ' ')), file = log_file, append = TRUE)
+    if (mon_type == 'tpca') {
+      write(sprintf('Reduced dimension          = %.0f', r), file = log_file, append = TRUE)
+      write(paste0('Axes                       = ', paste(axes, collapse = ' ')), file = log_file, append = TRUE)
+    }
+    if (mon_type == 'mixture') {
+      write(sprintf('p0                         = %.2f', p0), file = log_file, append = TRUE)
+    }
     write(sprintf('Number of training samples = %.0f', m), file = log_file, append = TRUE)
     write(sprintf('Window length              = %.0f', w), file = log_file, append = TRUE)
   }
 
   init_results_file <- function() {
-    header_items <- c('data_dim', 'reduced_dim', 'n_training',
+    header_items <- 'data_dim'
+    if (mon_type == 'tpca') header_items <- c(header_items, 'axes')
+    if (mon_type == 'mixture') header_items <- c(header_items, 'p0')
+    header_items <- c(header_items,  'n_training',
                       'window_size', 'n_sim', 'threshold',
                       'arl_est', 'arl_lower', 'arl_upper')
     write(paste(header_items, collapse = ' '),
@@ -119,10 +129,16 @@ threshold_finder <- function(x, mon_type, n, alpha,
   }
 
   store_results <- function(n_sim, threshold, arl_est, arl_conf_int) {
-    stored_values <- c(d, r, m, w, n_sim, threshold, arl_est, arl_conf_int)
+    stored_values <- d
+    if (mon_type == 'tpca') {
+      axes_string <- paste(axes, collapse = ':')
+      stored_values <- c(stored_values, axes_string)
+    }
+    if (mon_type == 'mixture') stored_values <- c(stored_values, p0)
+    stored_values <- c(stored_values, m, w, n_sim, round(threshold, 5),
+                       arl_est, arl_conf_int)
     write(stored_values, file = results_file,
           append = TRUE, ncolumns = length(stored_values))
-
   }
 
   geom_conf_int <- function(mean_est, n, thresh_alpha) {
@@ -131,7 +147,7 @@ threshold_finder <- function(x, mon_type, n, alpha,
     quartile <- qnorm((1 - thresh_alpha / 2))
     lower <- mean_est - quartile * sd_est / sqrt(n)
     upper <- mean_est + quartile * sd_est / sqrt(n)
-    conf_int <- c(lower, upper)
+    conf_int <- c(floor(lower), ceiling(upper))
     return(conf_int)
   }
 
@@ -197,8 +213,10 @@ threshold_finder <- function(x, mon_type, n, alpha,
     log_next_stage(rel_tol[k])
     while (!is_in_interval(arl, arl_conf_int) && (n_retries <= max_retries)) {
       log_current(n_sim[k], threshold)
+
       arl_est <- arl_func(threshold, n_sim[k])
       arl_conf_int <- geom_conf_int(arl_est, n_sim[k], thresh_alpha)
+
       log_results(arl_est, threshold)
       store_results(n_sim[k], threshold, arl_est, arl_conf_int)
 
