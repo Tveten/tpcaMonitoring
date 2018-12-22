@@ -9,7 +9,7 @@ init_sums <- function(x_train, x_1, t_max) {
                'v' = matrix(0, nrow = d, ncol = t_max + 1))
   sums$u[, 1] <- rowSums(x_train)
   sums$v[, 1] <- (m - 1) * rowVars(x_train)
-  sums <- update_sums(sums, x_1, m, 1)
+  update_sums(sums, x_1, m, 1)
 }
 
 update_sums <- function(sums, next_x, m, t) {
