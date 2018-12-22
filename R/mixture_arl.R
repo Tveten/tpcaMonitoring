@@ -19,13 +19,11 @@
 #' @export
 
 mixture_arl <- function(threshold, m, d, p0, n, w, n_sim) {
-  # TODO: Parallelize.
-  n_cores <- parallel::detectCores()
-  c1 <- parallel::makeCluster(n_cores - 1, outfile = '', type = 'PSOCK')
-  doParallel::registerDoParallel(c1)
   mu_x <- rep(0, d)
   Sigma_x <- diag(1, nrow = d)
   x_train <- gen_norm_data(m, mu_x, Sigma_x)
+
+  comp_cluster <- setup_parallel()
   `%dopar%` <- foreach::`%dopar%`
   run_lengths <- foreach::foreach(b = 1:n_sim, .combine = 'c') %dopar% {
     x <- gen_norm_data(n, mu_x, Sigma_x)
@@ -40,7 +38,6 @@ mixture_arl <- function(threshold, m, d, p0, n, w, n_sim) {
     }
     t
   }
-  parallel::stopCluster(c1)
-  arl_est <- n / mean(as.numeric(run_lengths < n))
-  arl_est
+  stop_parallel(comp_cluster)
+  est_arl(run_lengths, n, n_sim)
 }

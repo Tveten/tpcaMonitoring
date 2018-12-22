@@ -22,10 +22,8 @@ tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
   m <- attr(Sigma_x, 'n_obs')
   d <- length(mu_x)
   r <- length(axes)
-  # TODO: Parallelize.
-  n_cores <- parallel::detectCores()
-  c1 <- parallel::makeCluster(n_cores - 1, outfile = '', type = 'PSOCK')
-  doParallel::registerDoParallel(c1)
+
+  comp_cluster <- setup_parallel()
   `%dopar%` <- foreach::`%dopar%`
   # run_lengths <- rep(0, n_sim)
   # for (b in 1:n_sim) {
@@ -44,7 +42,6 @@ tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
     t
     # run_lengths[b] <- t
   }
-  parallel::stopCluster(c1)
-  arl_est <- n / mean(as.numeric(run_lengths < n))
-  arl_est
+  stop_parallel(comp_cluster)
+  est_arl(run_lengths, n, n_sim)
 }

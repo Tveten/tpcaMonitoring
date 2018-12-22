@@ -50,3 +50,20 @@ boot_z_train_np <- function(x, axes) {
               'mu'     = mu_z,
               'sigma2' = sigma2_z))
 }
+
+est_arl <- function(run_lengths, n, n_sim) {
+  arl_est <- n / mean(as.numeric(run_lengths < n))
+  if (is.infinite(arl_est)) arl_est <- n / (1 / n_sim)
+  round(arl_est)
+}
+
+setup_parallel <- function() {
+  n_cores <- parallel::detectCores()
+  c <- parallel::makeCluster(n_cores - 1, outfile = '', type = 'PSOCK')
+  doParallel::registerDoParallel(c)
+  c
+}
+
+stop_parallel <- function(c) {
+  parallel::stopCluster(c)
+}
