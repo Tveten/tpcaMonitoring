@@ -27,9 +27,11 @@ tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
   c1 <- parallel::makeCluster(n_cores - 1, outfile = '', type = 'PSOCK')
   doParallel::registerDoParallel(c1)
   `%dopar%` <- foreach::`%dopar%`
+  # run_lengths <- rep(0, n_sim)
+  # for (b in 1:n_sim) {
   run_lengths <- foreach::foreach(b = 1:n_sim, .combine = 'c') %dopar% {
     z_train <- boot_z_train(m, mu_x, Sigma_x, axes)
-    z <- gen_norm_data(n, mu = z_train$mu, Sigma = diag(z_train$sigma2))
+    z <- gen_norm_data(n, mu = z_train$mu, Sigma = diag(z_train$sigma2, nrow = r))
     t <- 1
     sums <- init_sums(z_train$data, z[, t], n)
     detection_stat <- 0
@@ -40,6 +42,7 @@ tpca_arl <- function(threshold, mu_x, Sigma_x, axes, n, w, n_sim) {
       detection_stat <- max(log_liks)
     }
     t
+    # run_lengths[b] <- t
   }
   parallel::stopCluster(c1)
   arl_est <- n / mean(as.numeric(run_lengths < n))

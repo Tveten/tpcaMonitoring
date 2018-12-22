@@ -9,6 +9,8 @@ rowSds <- function(x) {
 }
 
 boot_z_train <- function(m, mu_x, Sigma_x, axes) {
+  d <- length(mu_x)
+  r <- length(axes)
   x_train <- gen_norm_data(m, mu_x, Sigma_x)
   mu_hat <- rowMeans(x_train)
   sigma_hat <- rowSds(x_train)
@@ -21,11 +23,11 @@ boot_z_train <- function(m, mu_x, Sigma_x, axes) {
 
   z_train <- V %*% x_train / sqrt(lambda)
   mu_z <- 1 / sqrt(lambda) * V %*% ((mu_x - mu_hat) / sigma_hat)
-  D <- diag(1 / sigma_hat)
+  D <- diag(1 / sigma_hat, nrow = d)
   sigma2_z <- 1 / lambda * diag(V %*% (D %*% Sigma_x %*% D) %*% t(V))
   return(list('data'   = z_train,
-              'mu'     = mu_z,
-              'sigma2' = sigma2_z))
+              'mu'     = as.vector(mu_z),
+              'sigma2' = as.vector(sigma2_z)))
 }
 
 boot_z_train_np <- function(x, axes) {

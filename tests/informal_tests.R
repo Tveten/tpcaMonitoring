@@ -8,6 +8,15 @@ test_tpca_threshold <- function(d, r, m) {
   threshold_finder(x, 'tpca', n, alpha, axes = axes)
 }
 
+test_mixture_threshold <- function(d, p0, m) {
+  mu <- rep(0, d)
+  Sigma <- tpca::rcov_mat(d, range_sd = c(0.5, 2))
+  x <- t(MASS::mvrnorm(m, mu = mu, Sigma = Sigma))
+  n <- 500
+  alpha <- 0.05
+  threshold_finder(x, 'mixture', n, alpha, p0 = p0)
+}
+
 test_tpca_arl <- function(data_dim) {
   threshold <- 200
   m <- data_dim * 5
@@ -114,4 +123,13 @@ test_llC2 <- function(data_dim, seed) {
   log_liksC <- mixture_log_liksC(sums, m, t, w, 1)
   }
   print(1/2 * rowVars(x[, (n-1):n]))
+}
+
+test_boot_z_train <- function(r) {
+  d <- 10
+  m <- 30
+  mu <- rep(0, d)
+  Sigma <- tpca::rcor_mat(d)
+  axes <- 1:r
+  boot_z_train(m, mu, Sigma, axes)
 }
