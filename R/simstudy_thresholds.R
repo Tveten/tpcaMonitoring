@@ -57,13 +57,17 @@ find_tpca_thresholds <- function(x_train, cov_mat_type) {
 find_mixture_thresholds <- function(x_train) {
   m <- ncol(x_train)
   d <- nrow(x_train)
-  p0 <- c(0.03, 0.1, 0.3, 1)
+  # p0 <- c(0.03, 0.1, 0.3, 1)
+  p0 <- c(0.03, 0.1, 0.3)
+  init_thresh <- c(10, 20, 60)
 
   n <- 1000
   alpha <- 0.01
 
   for (i in seq_along(p0))
-    threshold_finder(x_train, 'mixture', n, alpha, p0 = p0[i], learning_coef = 10)
+    threshold_finder(x_train, 'mixture', n, alpha, p0 = p0[i],
+                     init_thresh   = init_thresh[i],
+                     learning_coef = 10)
 }
 
 run_threshold_finder_dense <- function() {
