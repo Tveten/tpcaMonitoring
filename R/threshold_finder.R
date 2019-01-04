@@ -53,18 +53,19 @@ threshold_finder <- function(x, mon_type, n, alpha,
                              rel_tol       = c(0.2, 0.1, 0.05, 0.025),
                              thresh_alpha  = 0.05,
                              init_thresh   = NULL,
-                             learning_coef = NULL) {
+                             learning_coef = NULL,
+                             file_id       = NULL) {
 
   set_file_name <- function(file_type) {
     get_n_equal_files <- function(root_name, files_in_wdir) {
       split_files <- strsplit(files_in_wdir, '(', fixed = TRUE)
-      stripped_files <- vapply(split_files, `[`, numeric(1), 1)
+      stripped_files <- vapply(split_files, `[`, character(1), 1)
       n_equals <- sum(root_name == stripped_files)
       n_equals
     }
 
     files_in_wdir <- list.files()
-    root_name <- paste0(mon_type, '_threshold_', file_type, '_',
+    root_name <- paste0(mon_type, file_id, '_threshold_', file_type, '_',
                         'm', as.character(m),
                         'd', as.character(d))
     if (mon_type == 'tpca') root_name <- paste0(root_name, 'ax',
@@ -76,8 +77,8 @@ threshold_finder <- function(x, mon_type, n, alpha,
     }
 
     n_equal_files <- get_n_equal_files(root_name, files_in_wdir)
-    if (n_equals > 0)
-      root_name <- paste0(root_name, '(', as.character(n_equals + 1), ')')
+    if (n_equal_files > 0)
+      root_name <- paste0(root_name, '(', as.character(n_equal_files + 1), ')')
     paste0(root_name, '.txt')
   }
 

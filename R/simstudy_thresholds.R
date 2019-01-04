@@ -50,7 +50,8 @@ find_tpca_thresholds <- function(x_train, cov_mat_type) {
   alpha <- 0.01
 
   for (i in seq_along(axes_list))
-    threshold_finder(x_train, 'tpca', n, alpha, axes = axes_list[[i]])
+    threshold_finder(x_train, 'tpca', n, alpha, axes = axes_list[[i]],
+                     file_id = paste0('_', cov_mat_type))
 }
 
 find_mixture_thresholds <- function(x_train) {
