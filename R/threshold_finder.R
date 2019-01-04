@@ -56,6 +56,13 @@ threshold_finder <- function(x, mon_type, n, alpha,
                              learning_coef = NULL) {
 
   set_file_name <- function(file_type) {
+    get_n_equal_files <- function(root_name, files_in_wdir) {
+      split_files <- strsplit(files_in_wdir, '(', fixed = TRUE)
+      stripped_files <- vapply(split_files, `[`, numeric(1), 1)
+      n_equals <- sum(root_name == stripped_files)
+      n_equals
+    }
+
     files_in_wdir <- list.files()
     root_name <- paste0(mon_type, '_threshold_', file_type, '_',
                         'm', as.character(m),
@@ -67,9 +74,10 @@ threshold_finder <- function(x, mon_type, n, alpha,
       p0_str <- paste0(strsplit(as.character(p0), '[.]')[[1]], collapse = '')
       root_name <- paste0(root_name, 'p0-', p0_str)
     }
-    n_logs <- sum(grepl(root_name, files_in_wdir))
-    if (n_logs > 0)
-      root_name <- paste0(root_name, '(', as.character(n_logs + 1), ')')
+
+    n_equal_files <- get_n_equal_files(root_name, files_in_wdir)
+    if (n_equals > 0)
+      root_name <- paste0(root_name, '(', as.character(n_equals + 1), ')')
     paste0(root_name, '.txt')
   }
 
