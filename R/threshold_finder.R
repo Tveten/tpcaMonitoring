@@ -201,8 +201,10 @@ threshold_finder <- function(x, mon_type, n, alpha,
   attr(Sigma_x, 'n_obs') <- m
 
   r <- length(axes)
+  if (mon_type == 'mixture') mon_dim <- d
+  if (mon_type == 'tpca') mon_dim <- r
   n_sim <- get_n_sim(thresh_alpha, rel_tol)
-  threshold <- init_threshold(r)
+  threshold <- init_threshold(mon_dim)
   arl <- n / alpha
   arl_func <- get_arl_func(mon_type)
 
@@ -214,7 +216,7 @@ threshold_finder <- function(x, mon_type, n, alpha,
   # When rel_tol is low, the algorithm might jump back and forth over the true
   # value. Thus, it should be stopped at some point. Too many runs on the final
   # stage is not worth it.
-  max_retries <- 5
+  max_retries <- max(5, round(20 - 1 / 4 * mon_dim))
   n_retries <- 1
   for (k in 1:length(n_sim)) {
     arl_conf_int <- c(0, 0)
