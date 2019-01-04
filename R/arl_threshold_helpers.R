@@ -53,7 +53,7 @@ boot_z_train_np <- function(x, axes) {
 
 est_arl <- function(run_lengths, n, n_sim) {
   arl_est <- n / mean(as.numeric(run_lengths < n))
-  if (is.infinite(arl_est)) arl_est <- n / (1 / n_sim)
+  if (is.infinite(arl_est)) arl_est <- 5 * n / (1 / n_sim)
   round(arl_est)
 }
 
