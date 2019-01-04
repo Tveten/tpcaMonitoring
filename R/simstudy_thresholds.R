@@ -1,4 +1,4 @@
-find_tresholds <- function(x_train, cov_mat_type) {
+find_tpca_thresholds <- function(x_train, cov_mat_type) {
   unique_vectors <- function(list_of_vectors) {
     list_of_vectors[!duplicated(lapply(list_of_vectors, sort))]
   }
@@ -41,7 +41,6 @@ find_tresholds <- function(x_train, cov_mat_type) {
   m <- ncol(x_train)
   d <- nrow(x_train)
   cov_mat <- 1 / (m - 1) * x_train %*% t(x_train)
-  p0 <- c(0.03, 0.1, 0.3, 1)
   r <- c(1, 2, 3, 5, 10, 20)
   cutoff <- c(0.8, 0.9, 0.95, 0.99, 0.995, 0.999)
   max_axes <- round(d / 5)
@@ -52,24 +51,45 @@ find_tresholds <- function(x_train, cov_mat_type) {
 
   for (i in seq_along(axes_list))
     threshold_finder(x_train, 'tpca', n, alpha, axes = axes_list[[i]])
+}
+
+find_mixture_thresholds <- function(x_train) {
+  m <- ncol(x_train)
+  d <- nrow(x_train)
+  p0 <- c(0.03, 0.1, 0.3, 1)
+
+  n <- 1000
+  alpha <- 0.01
+
   for (i in seq_along(p0))
-    threshold_finder(x_train, 'mixture', n, alpha, p0 = p0[i])
+    threshold_finder(x_train, 'mixture', n, alpha, p0 = p0[i], learning_coef = 10)
 }
 
 run_threshold_finder_dense <- function() {
-  find_tresholds(get_train_dense(), 'dense')
+  find_tpca_thresholds(get_train_dense(), 'dense')
 }
 
 run_threshold_finder_halfsparse <- function() {
-  find_tresholds(get_train_halfsparse(), 'halfsparse')
+  find_tpca_thresholds(get_train_halfsparse(), 'halfsparse')
 }
 
 run_threshold_finder_sparse <- function() {
-  find_tresholds(get_train_sparse(), 'sparse')
+  find_tpca_thresholds(get_train_sparse(), 'sparse')
+}
+
+run_threshold_finder_mixture <- function() {
+  # The dimension of all the training sets are the same,
+  # so any of them can be input below with the same result.
+  find_mixture_thresholds(get_train_dense())
 }
 
 run_all_threshold_finders <- function() {
   run_threshold_finder_dense()
   run_threshold_finder_halfsparse()
+  run_threshold_finder_sparse()
+}
+
+run_selected_threshold_finders <- function() {
+  run_threshold_finder_mixture()
   run_threshold_finder_sparse()
 }
