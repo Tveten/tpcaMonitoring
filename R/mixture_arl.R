@@ -33,7 +33,7 @@ mixture_arl <- function(threshold, m, d, p0, n, w, n_sim) {
     while ((detection_stat < threshold) & (t < n)) {
       t <- t + 1
       sums <- update_sumsC(sums, x[, t], m, t)
-      log_liks <- mixture_log_liksC(sums, m, t, w, 1)
+      log_liks <- mixture_log_liksC(sums, m, t, w, p0)
       detection_stat <- max(log_liks)
     }
     t
