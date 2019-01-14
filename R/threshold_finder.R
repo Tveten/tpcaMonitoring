@@ -58,7 +58,7 @@ threshold_finder <- function(x, mon_type, n, alpha,
 
   set_file_name <- function(file_type) {
     get_n_equal_files <- function(root_name, files_in_wdir) {
-      split_files <- strsplit(files_in_wdir, '(', fixed = TRUE)
+      split_files <- strsplit(files_in_wdir, '[(.]')
       stripped_files <- vapply(split_files, `[`, character(1), 1)
       n_equals <- sum(root_name == stripped_files)
       n_equals
