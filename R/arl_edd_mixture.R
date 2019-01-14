@@ -41,3 +41,5 @@ mixture_arl <- function(threshold, m, d, p0, n, w, n_sim) {
   stop_parallel(comp_cluster)
   est_arl(run_lengths, n, n_sim)
 }
+
+mixture_edd <- function()
