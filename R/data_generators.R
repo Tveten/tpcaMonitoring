@@ -1,26 +1,3 @@
-gen_ind_data <- function(d, stream_length,
-                         K = 0, kappa = 0, mu = 0, sigma2 = 1) {
-  # Generates all relevant different data streams.
-  #
-  # Args:
-  #   N: Dimension of the original data stream.
-  #   stream.length:  Wanted length of the data stream.
-  #   n.affected = 0: Number of affected streams.
-  #   mu = 0: Size of the change in all entries in the n.affected-dimensional
-  #           mean vector.
-  #   sigma2 = 1: Variance of each indiviual stream post-change.
-  #
-  # Return:
-  #   X: The specified (N x stream.length)-dimensional data stream
-
-  #set.seed(1)
-  length.affected <- stream.length - kappa
-  X <- matrix(rnorm(N * stream.length), ncol = stream.length)
-  if (K > 0) {
-    X.affected <- t(mvrnorm(length.affected,
-                            mu = rep(mu, K),
-                            Sigma = diag(sigma2, nrow = K)))
-    X[1:K, (kappa + 1):stream.length] <- X.affected
   }
   return(X)
 }
