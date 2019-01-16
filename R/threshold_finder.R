@@ -194,7 +194,6 @@ threshold_finder <- function(x, mon_type, n, alpha,
   # TODO: Error handling: Either axes or p0 must be supplied.
   # TODO: Update log and result functions.
 
-  start_time <- proc.time()[3] / 60
   d <- nrow(x)
   m <- ncol(x)
   mu_x <- rowMeans(x)
@@ -213,6 +212,7 @@ threshold_finder <- function(x, mon_type, n, alpha,
   results_file <- set_results_name()
   init_log_file()
   init_results_file()
+  start_time <- proc.time()[3] / 60
 
   # When rel_tol is low, the algorithm might jump back and forth over the true
   # value. Thus, it should be stopped at some point. Too many runs on the final
