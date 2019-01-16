@@ -67,3 +67,7 @@ setup_parallel <- function() {
 stop_parallel <- function(c) {
   parallel::stopCluster(c)
 }
+
+conf_int <- function(x, alpha = 0.05) {
+  ci <- quantile(x, probs = c(alpha / 2, (1 - alpha) / 2))
+}
