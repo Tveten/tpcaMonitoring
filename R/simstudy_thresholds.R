@@ -59,7 +59,7 @@ find_mixture_thresholds <- function(x_train) {
   d <- nrow(x_train)
   # p0 <- c(0.03, 0.1, 0.3, 1)
   p0 <- c(0.03, 0.1, 0.3)
-  init_thresh <- c(10, 20, 60)
+  init_thresh <- c(30, 50, 80)
 
   n <- 1000
   alpha <- 0.01
