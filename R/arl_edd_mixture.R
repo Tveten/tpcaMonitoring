@@ -42,4 +42,27 @@ mixture_arl <- function(threshold, m, d, p0, n, w, n_sim) {
   est_arl(run_lengths, n, n_sim)
 }
 
-mixture_edd <- function()
+mixture_edd <- function(x_train, x, p0, w, n_max) {
+  # d <- nrow(x_train)
+  # m <- ncol(x_train)
+  # w <- 200
+  # t.start <- 4
+  # threshold <- get_threshold(p0, N)
+  # max.iter <- ncol(x)
+  #
+  # # Monitoring
+  # sums <- init_sums()
+  # detection.statistic <- 0
+  # t <- 1
+  # sums <- init_sums(x_train, x[, t], n)
+  # detection_stat <- 0
+  # while ((detection_stat < threshold) & (t < n_max)) {
+  #   t <- t + 1
+  #   sums <- update_sumsC(sums, x[, t], m, t)
+  #   log_liks <- mixture_log_liksC(sums, m, t, w, p0)
+  #   detection_stat <- max(log_liks)
+  # }
+  # run_length <- t - kappa
+  # run_length
+  5
+}
