@@ -6,7 +6,8 @@ gen_train_dense <- function(d, m, return_all = FALSE) {
   # Separate seed so Sigma can be kept same, but data varied for verification.
   set.seed(201)
   x <- gen_norm_data(m, mu, Sigma)
-  if (return_all) return(list('x' = x, 'mu' = mu, 'Sigma' = Sigma))
+  if (return_all) return(list('x' = x, 'mu' = mu, 'Sigma' = Sigma,
+                              'type' = 'dense'))
   else return(x)
 }
 
@@ -18,7 +19,8 @@ gen_train_halfsparse <- function(d, m, return_all = FALSE) {
   # Separate seed so Sigma can be kept same, but data varied for verification.
   set.seed(202)
   x <- gen_norm_data(m, mu, Sigma)
-  if (return_all) return(list('x' = x, 'mu' = mu, 'Sigma' = Sigma))
+  if (return_all) return(list('x' = x, 'mu' = mu, 'Sigma' = Sigma,
+                              'type' = 'halfsparse'))
   else return(x)
 }
 
@@ -30,7 +32,8 @@ gen_train_sparse <- function(d, m, return_all = FALSE) {
   # Separate seed so Sigma can be kept same, but data varied for verification.
   set.seed(203)
   x <- gen_norm_data(m, mu, Sigma)
-  if (return_all) return(list('x' = x, 'mu' = mu, 'Sigma' = Sigma))
+  if (return_all) return(list('x' = x, 'mu' = mu, 'Sigma' = Sigma,
+                              'type' = 'sparse'))
   else return(x)
 }
 
