@@ -1,13 +1,3 @@
-rowVars <- function(x) {
-  d <- ncol(x)
-  x_mean <- rowMeans(x)
-  d / (d - 1) * rowMeans((x - x_mean)^2)
-}
-
-rowSds <- function(x) {
-  sqrt(rowVars(x))
-}
-
 boot_z_train <- function(m, mu_x, Sigma_x, axes) {
   d <- length(mu_x)
   r <- length(axes)
@@ -16,7 +6,7 @@ boot_z_train <- function(m, mu_x, Sigma_x, axes) {
   sigma_hat <- rowSds(x_train)
   x_train <- (x_train - mu_hat) / sigma_hat
 
-  cor_mat_hat <- 1 / (m - 1) * x_train%*% t(x_train)
+  cor_mat_hat <- 1 / (m - 1) * x_train %*% t(x_train)
   pca_obj <- tpca::pca(cor_mat_hat, axes = axes)
   V <- pca_obj$vectors
   lambda <- pca_obj$values
@@ -57,17 +47,16 @@ est_arl <- function(run_lengths, n, n_sim) {
   round(arl_est)
 }
 
-setup_parallel <- function() {
-  n_cores <- parallel::detectCores()
-  c <- parallel::makeCluster(n_cores - 1, outfile = '', type = 'PSOCK')
-  doParallel::registerDoParallel(c)
-  c
-}
-
-stop_parallel <- function(c) {
-  parallel::stopCluster(c)
-}
-
 conf_int <- function(x, alpha = 0.05) {
   ci <- quantile(x, probs = c(alpha / 2, (1 - alpha) / 2))
+}
+
+geom_conf_int <- function(mean_est, n, thresh_alpha) {
+  p_est <- 1 / mean_est
+  sd_est <- sqrt((1 - p_est) / p_est^2)
+  quartile <- qnorm((1 - thresh_alpha / 2))
+  lower <- mean_est - quartile * sd_est / sqrt(n)
+  upper <- mean_est + quartile * sd_est / sqrt(n)
+  conf_int <- c(floor(lower), ceiling(upper))
+  return(conf_int)
 }
