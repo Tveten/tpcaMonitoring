@@ -184,11 +184,11 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
   log_file <- set_log_name(cov_mat_type, change_type)
   init_log_file(log_file)
   start_time <- proc.time()[3] / 60
-  # comp_cluster <- setup_parallel()
-  # `%dopar%` <- foreach::`%dopar%`
-  # all_run_lengths <- foreach::foreach(l = 1:n_sim) %dopar% {
-  all_run_lengths <- list()
-  for (l in 1:n_sim) {
+  comp_cluster <- setup_parallel()
+  `%dopar%` <- foreach::`%dopar%`
+  all_run_lengths <- foreach::foreach(l = 1:n_sim) %dopar% {
+  # all_run_lengths <- list()
+  # for (l in 1:n_sim) {
     log_current_stage(log_file, change_type, l)
     x <- generate_cor_data(d, n_max, mu0, Sigma0, kappa, p, mu, sigma, rho_scale)
     z <- V %*% x / sqrt(lambda)
@@ -196,16 +196,16 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
     rl_max_pca <- vapply(axes_max_pca, sim_tpca_rl, numeric(1), z = z)
     rl_min_pca <- vapply(axes_min_pca, sim_tpca_rl, numeric(1), z = z)
     rl_tpca <- vapply(axes_tpca, sim_tpca_rl, numeric(1), z = z)
-    all_run_lengths[[l]] <- list('mix'     = rl_mix,
-                                 'max_pca' = rl_max_pca,
-                                 'min_pca' = rl_min_pca,
-                                 'tpca'    = rl_tpca)
-    # list('mix'     = rl_mix,
-    #      'max_pca' = rl_max_pca,
-    #      'min_pca' = rl_min_pca,
-    #      'tpca'    = rl_tpca)
+    # all_run_lengths[[l]] <- list('mix'     = rl_mix,
+    #                              'max_pca' = rl_max_pca,
+    #                              'min_pca' = rl_min_pca,
+    #                              'tpca'    = rl_tpca)
+    list('mix'     = rl_mix,
+         'max_pca' = rl_max_pca,
+         'min_pca' = rl_min_pca,
+         'tpca'    = rl_tpca)
   }
-  # stop_parallel(comp_cluster)
+  stop_parallel(comp_cluster)
 
   store_results(all_run_lengths)
 }
