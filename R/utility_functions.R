@@ -28,3 +28,8 @@ is_equal_vectors <- function(x, y) {
   is_equal <- function(u, v) isTRUE(all.equal(u, v))
   all(unlist(Map(is_equal, x, y)))
 }
+
+assert_cor_mat_attribute <- function(Sigma) {
+  if (is.null(attr(Sigma, 'which_dims_cor')))
+    stop('Sigma must contain the attribute "which_dims_cor", as when generated from tpca::r_cor_mat or tpca::r_cov_mat')
+}

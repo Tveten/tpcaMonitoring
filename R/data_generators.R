@@ -18,7 +18,6 @@ generate_cor_data <- function(d, n, mu0, Sigma0,
       if (!is.null(rho_scale)) {
         draw_rho <- function(n) rep(rho_scale, n)
       }
-      print(D)
       Sigma1 <- tpca::change_cor_mat(Sigma0, D,
                                      draw_cor = draw_rho,
                                      draw_sd  = draw_sigma)
@@ -26,6 +25,8 @@ generate_cor_data <- function(d, n, mu0, Sigma0,
     } else return(Sigma0)
 
   }
+
+  assert_cor_mat_attribute(Sigma0)
 
   mu0 <- rep(0, d)
   k <- round(p * d)
