@@ -1,20 +1,24 @@
 generate_cor_data <- function(d, n, mu0, Sigma0,
                               kappa = 0, p = 0,
-                              mu = 0, sigma = 1, rho_scale = 1) {
+                              mu = NULL, sigma = NULL, rho_scale = NULL) {
 
   change_mu <- function(mu0, mu, D) {
-    if (mu != 0) {
+    if (!is.null(mu)) {
+      mu1 <- mu0
       mu1[D] <- mu
       return(mu1)
     } else return(mu0)
   }
 
   change_Sigma <- function(Sigma0, sigma, rho_scale, D) {
-    if (sigma != 1 || rho_scale != 1) {
+    if (!is.null(sigma) || !is.null(rho_scale)) {
       draw_sigma <- NULL
       draw_rho <- NULL
-      if (sigma != 1) draw_sigma <- function(n) rep(sigma, n)
-      if (rho_scale != 1) draw_rho <- function(n) rep(rho_scale, n)
+      if (!is.null(sigma)) draw_sigma <- function(n) rep(sigma, n)
+      if (!is.null(rho_scale)) {
+        draw_rho <- function(n) rep(rho_scale, n)
+      }
+      print(D)
       Sigma1 <- tpca::change_cor_mat(Sigma0, D,
                                      draw_cor = draw_rho,
                                      draw_sd  = draw_sigma)
@@ -23,12 +27,13 @@ generate_cor_data <- function(d, n, mu0, Sigma0,
 
   }
 
-  mu0 <- rep(0, N)
+  mu0 <- rep(0, d)
   k <- round(p * d)
 
-  if (k == 0)
+  if (k == 0) {
     x <- gen_norm_data(n, mu0, Sigma0)
-  else if (k > 0 && k <= d) {
+    warning(paste0('p = ', p, 'is so small that no dimensions are changed.'))
+  } else if (k > 0 && k <= d) {
     affected_dims <- sample(1:d, k)
     mu1 <- change_mu(mu0, mu, affected_dims)
     Sigma1 <- change_Sigma(Sigma0, sigma, rho_scale, affected_dims)
