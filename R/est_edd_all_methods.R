@@ -183,7 +183,6 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
 
   log_file <- set_log_name(cov_mat_type, change_type)
   init_log_file(log_file)
-  start_time <- proc.time()[3] / 60
   comp_cluster <- setup_parallel()
   `%dopar%` <- foreach::`%dopar%`
   all_run_lengths <- foreach::foreach(l = 1:n_sim) %dopar% {
