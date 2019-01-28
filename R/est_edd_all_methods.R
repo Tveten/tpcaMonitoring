@@ -140,7 +140,8 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
     methods <- names(all_run_lengths[[1]])
     rl_mats <- lapply(methods, function(method) get_rl_mat(all_run_lengths, method))
     edd_file_rep <- rep(edd_file, length(methods))
-    method_params <- list(p0s, r_pca, r_pca, c_tpca)
+    if (change_type == 'cor') method_params <- list(r_pca, r_pca, c_tpca)
+    else method_params <- list(r_pca, r_pca, c_tpca, p0s)
     Map(store_edd_results, rl_mats, methods, edd_file_rep, method_params)
   }
 
@@ -191,18 +192,18 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
     log_current_stage(log_file, change_type, l)
     x <- generate_cor_data(d, n_max, mu0, Sigma0, kappa, p, mu, sigma, rho_scale)
     z <- V %*% x / sqrt(lambda)
-    rl_mix <- vapply(p0s, sim_mixture_rl, numeric(1), x = x)
     rl_max_pca <- vapply(axes_max_pca, sim_tpca_rl, numeric(1), z = z)
     rl_min_pca <- vapply(axes_min_pca, sim_tpca_rl, numeric(1), z = z)
     rl_tpca <- vapply(axes_tpca, sim_tpca_rl, numeric(1), z = z)
-    # all_run_lengths[[l]] <- list('mix'     = rl_mix,
-    #                              'max_pca' = rl_max_pca,
-    #                              'min_pca' = rl_min_pca,
-    #                              'tpca'    = rl_tpca)
-    list('mix'     = rl_mix,
-         'max_pca' = rl_max_pca,
-         'min_pca' = rl_min_pca,
-         'tpca'    = rl_tpca)
+    rl_list <- list('max_pca' = rl_max_pca,
+                    'min_pca' = rl_min_pca,
+                    'tpca'    = rl_tpca)
+    if (any(change_type == c('mean', 'sd'))) {
+      rl_mix <- vapply(p0s, sim_mixture_rl, numeric(1), x = x)
+      rl_list$mix <- rl_mix
+    }
+    rl_list
+    # all_run_lengths[[l]] <- rl_list
   }
   stop_parallel(comp_cluster)
 
