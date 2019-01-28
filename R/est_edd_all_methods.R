@@ -111,7 +111,7 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
 
   log_current_stage <- function(log_file, change_type, l) {
     log_file  <- paste0('edd_log_', change_type, '_', cov_mat_type)
-    time_used <- round(proc.time()[3]/60 - start_time, 2)
+    time_used <- round(proc.time()[3]/60, 2)
     log_str <- paste0('Sim nr. ', l, ' with p = ', p, ' and ',
                       change_type, ' = ', change_param, '. ',
                       time_used, ' min used.')
