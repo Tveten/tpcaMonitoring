@@ -47,6 +47,14 @@ edd_sim <- function(train_obj) {
   }
 
   run_cor_change_simulations <- function() {
+    # Since we only study decreases in correlation, only the correlated
+    # dimensions can be changed. Hence, it's no point in running p for larger
+    # values than the proportion of correlated dimensions.
+    n_dims_cor <- length(attr(train_obj$Sigma, 'which_dims_cor'))
+    d <- ncol(train_obj$Sigma)
+    prop_cor_dims <- n_dims_cor / d
+    p <- p[p <= prop_cor_dims]
+
     for (i in 1:length(p)) {
       for (j in 1:length(rho_scale)) {
         est_edd_all_methods(train_obj, n_max, n_sim, edd_cor_file,
