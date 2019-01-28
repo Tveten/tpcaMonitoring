@@ -13,8 +13,10 @@ LazyData: true
 Imports:
     doParallel (>= 1.0),
     assertthat (>= 0.2.0),
+    RColorBrewer (>= 1.1),
     ggplot2 (>= 2.2.1),
     reshape2 (>= 1.4.3),
+    gridExtra (>= 2.3),
     Rcpp (>= 1.0.0)
 Depends: R (>= 3.4.0)
 Remotes: Tveten/tpca
