@@ -28,7 +28,8 @@ get_edd <- function(file) {
     return(edd_array)
   }
 
-  edd_results <- read.table(paste0('./results/', file), header = TRUE)
+  path <- 'results/'
+  edd_results <- read.table(paste0(path, file), header = TRUE)
   p <- sort(unique(edd_results$p))
   change_param <- sort(unique(edd_results$change_param))
   methods <- as.character(unique(edd_results$method))
@@ -77,7 +78,7 @@ ggplot_edd <- function(file, change_param,
     }
     if (change_type == 'cor') {
       rho_char <- '\u03C1'
-      title_str <- paste0('Change in cor: ', rho_char, ' -> ', change_param)
+      title_str <- paste0('Change in cor: ', rho_char, ' -> ', change_param, rho_char)
     }
     return(title_str)
   }
@@ -123,9 +124,10 @@ ggplot_edd <- function(file, change_param,
 
 multiplot_edd <- function(cov_mat_type, change_type,
                           change_params = NULL, ylim = c(0, 2000)) {
-  file <- paste0('./results/edd_', change_type, '_', cov_mat_type, '_m300d100w200.txt')
+  path <- 'results/'
+  file <- paste0('edd_', change_type, '_', cov_mat_type, '_m300d100w200.txt')
   if (is.null(change_params)) {
-    edd_results <- read.table(file, header = TRUE)
+    edd_results <- read.table(paste0(path, file), header = TRUE)
     change_params <- sort(unique(edd_results$change_param))
   }
   l <- length(change_params)
@@ -166,7 +168,7 @@ save_all_plots <- function(ylim = c(0, 2000)) {
       fig <- multiplot_edd(cov_mat_types[i], change_types[j], ylim = ylim)
       file_name <- paste0('edd_', change_types[j], '_', cov_mat_types[i],
                           '_ylim', ylim[1], '-', ylim[2], '.png')
-      ggplot2::ggsave(file_name, plot = fig, path = './results/',
+      ggplot2::ggsave(file_name, plot = fig, path = './results/figures/',
                       width = 20, height = 14, units = 'cm')
     }
   }
