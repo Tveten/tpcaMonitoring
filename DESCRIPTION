@@ -17,6 +17,8 @@ Imports:
     ggplot2 (>= 2.2.1),
     reshape2 (>= 1.4.3),
     gridExtra (>= 2.3),
+    ggpubr (>= 0.2),
+    latex2exp (>= 0.4),
     Rcpp (>= 1.0.0)
 Depends: R (>= 3.4.0)
 Remotes: Tveten/tpca
