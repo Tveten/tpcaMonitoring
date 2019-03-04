@@ -8,6 +8,11 @@ rowSds <- function(x) {
   sqrt(rowVars(x))
 }
 
+first_up <- function(x) {
+  substr(x, 1, 1) <- toupper(substr(x, 1, 1))
+  x
+}
+
 setup_parallel <- function() {
   n_cores <- parallel::detectCores()
   c <- parallel::makeCluster(n_cores - 1, outfile = '', type = 'PSOCK')
