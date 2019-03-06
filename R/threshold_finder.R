@@ -65,12 +65,12 @@ threshold_finder <- function(x, mon_type, n, alpha,
     }
 
     files_in_wdir <- list.files()
-    root_name <- paste0(mon_type, file_id, '_threshold_', file_type, '_',
-                        'm', as.character(m),
-                        'd', as.character(d))
+    dir <- './thresholds/threshold_results/'
+    root_name <- paste0(mon_type, '_threshold_', file_id, file_type, '_',
+                        'n', n, 'alpha', substr_right(alpha, 2),
+                        'm', m, 'd', d)
     if (mon_type == 'tpca') root_name <- paste0(root_name, 'ax',
-                                                as.character(min(axes)), '-',
-                                                as.character(max(axes)))
+                                                paste(axes, collapse = '-'))
     if (mon_type == 'mixture') {
       p0_str <- paste0(strsplit(as.character(p0), '[.]')[[1]], collapse = '')
       root_name <- paste0(root_name, 'p0-', p0_str)
@@ -79,7 +79,7 @@ threshold_finder <- function(x, mon_type, n, alpha,
     n_equal_files <- get_n_equal_files(root_name, files_in_wdir)
     if (n_equal_files > 0)
       root_name <- paste0(root_name, '(', as.character(n_equal_files + 1), ')')
-    paste0(root_name, '.txt')
+    paste0(dir, root_name, '.txt')
   }
 
   set_log_name <- function() {
@@ -140,7 +140,7 @@ threshold_finder <- function(x, mon_type, n, alpha,
   store_results <- function(n_sim, threshold, arl_est, arl_conf_int) {
     stored_values <- d
     if (mon_type == 'tpca') {
-      axes_string <- paste(axes, collapse = ':')
+      axes_string <- paste(axes, collapse = '-')
       stored_values <- c(stored_values, axes_string)
     }
     if (mon_type == 'mixture') stored_values <- c(stored_values, p0)

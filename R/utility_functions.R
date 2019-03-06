@@ -38,3 +38,17 @@ assert_cor_mat_attribute <- function(Sigma) {
   if (is.null(attr(Sigma, 'which_dims_cor')))
     stop('Sigma must contain the attribute "which_dims_cor", as when generated from tpca::r_cor_mat or tpca::r_cov_mat')
 }
+
+substr_right <- function(x, n){
+  substr(x, nchar(x)-n+1, nchar(x))
+}
+
+list_files_matching <- function(path, ...) {
+  # dots <- list(...)
+  dots <- c(...)
+  n_dots <- length(dots)
+
+  expr <- paste(paste0('(?=.*', dots, ')'), collapse = '')
+  dir(path)[grepl(expr, dir(path), perl = TRUE)]
+}
+

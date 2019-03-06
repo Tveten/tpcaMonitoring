@@ -1,4 +1,4 @@
-#' Estimating the edd for a given change for all methods.
+#' Estimates the edd for a given change for all methods.
 #'
 #' Description
 #'
@@ -17,6 +17,7 @@
 #'
 #' @export
 est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
+                                p0s, r_pca, threshold_settings,
                                 mu = NULL, sigma = NULL, rho_scale = NULL) {
 
   get_change_type <- function() {
@@ -44,8 +45,9 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
     if (change_type == 'cor') return(rho_scale)
   }
 
-  get_tpca_train_info <- function(cov_mat_type, change_type) {
-    axes_location <- paste0('./thresholds/axes/', cov_mat_type, '_tpca_axes.txt')
+  get_tpca_train_info <- function(cov_mat_nr, change_type) {
+    dir <- './thresholds/axes/'
+    axes_location <- paste0(dir, 'tpca_axes_', cov_mat_nr, '_m', m, 'd', d, '.txt')
     all_lines_vec <- readLines(axes_location)
     all_lines_split <- strsplit(all_lines_vec, ' ')
     axes_list <- list()
@@ -62,9 +64,11 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
     list('axes' = axes_list, 'cutoffs' = cutoffs)
   }
 
-  get_mixture_threshold <- function(m, d, cov_mat_type, p0) {
-    threshold_file <- paste0('./thresholds/mixture_thresholds_m', m,
-                             'd', d, '_FINAL.txt')
+  get_mixture_threshold <- function(m, d, cov_mat_nr, p0) {
+    dir <- './thresholds/'
+    alpha_str <- strsplit(as.character(threshold_settings$alpha), '[.]')[[1]][2]
+    threshold_file <- paste0(dir, 'mixture_thresholds_n', threshold_settings$n,
+                             'alpha', alpha_str, 'm', m, 'd', d, '_FINAL.txt')
     threshold_df <- read.table(threshold_file, header = TRUE, sep = ' ')
     threshold <- threshold_df$threshold[threshold_df$p0 == p0]
     if (length(threshold) == 0)
@@ -76,12 +80,15 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
     threshold
   }
 
-  get_tpca_threshold <- function(m, d, cov_mat_type, axes) {
-    threshold_file <- paste0('./thresholds/tpca_', cov_mat_type, '_thresholds_m', m,
-                             'd', d, '_FINAL.txt')
+  get_tpca_threshold <- function(m, d, cov_mat_nr, axes) {
+    dir <- './thresholds/'
+    alpha_str <- strsplit(as.character(threshold_settings$alpha), '[.]')[[1]][2]
+    threshold_file <- paste0(dir, 'tpca_thresholds_', cov_mat_nr,
+                             '_n', threshold_settings$n, 'alpha', alpha_str,
+                             'm', m, 'd', d, '_FINAL.txt')
     threshold_df <- read.table(threshold_file, header = TRUE, sep = ' ')
     threshold_df$axes <- as.character(threshold_df$axes)
-    axes_in_df <- lapply(strsplit(threshold_df$axes, ':'), as.numeric)
+    axes_in_df <- lapply(strsplit(threshold_df$axes, '-'), as.numeric)
     axes_in_df <- lapply(axes_in_df, sort)
     axes <- sort(axes)
     ind <- which(vapply(axes_in_df, is_equal_vectors, logical(1), y = axes))
@@ -96,21 +103,22 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
     threshold
   }
 
-  get_threshold <- function(m, d, cov_mat_type, p0 = NULL, axes = NULL) {
-    if (!is.null(p0)) return(get_mixture_threshold(m, d, cov_mat_type, p0))
-    if (!is.null(axes)) return(get_tpca_threshold(m, d, cov_mat_type, axes))
+  get_threshold <- function(m, d, cov_mat_nr, p0 = NULL, axes = NULL) {
+    if (!is.null(p0)) return(get_mixture_threshold(m, d, cov_mat_nr, p0))
+    if (!is.null(axes)) return(get_tpca_threshold(m, d, cov_mat_nr, axes))
   }
 
-  set_log_name <- function(cov_mat_type, change_type) {
-    log_file  <- paste0('edd_log_', change_type, '_', cov_mat_type)
+  get_log_name <- function(cov_mat_nr, change_type) {
+    dir <- './results/'
+    log_file <- list_files_matching(dir, 'log', cov_mat_nr, change_type)
+    paste0(dir, log_file)
   }
 
-  init_log_file <- function(log_file) {
+  log_new_change <- function(log_file) {
     write('===================================', file = log_file, append = TRUE)
   }
 
   log_current_stage <- function(log_file, change_type, l) {
-    log_file  <- paste0('edd_log_', change_type, '_', cov_mat_type)
     time_used <- round(proc.time()[3]/60, 2)
     log_str <- paste0('Sim nr. ', l, ' with p = ', p, ' and ',
                       change_type, ' = ', change_param, '. ',
@@ -148,7 +156,7 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
   x_train <- train_obj$x
   mu0 <- train_obj$mu
   Sigma0 <- train_obj$Sigma
-  cov_mat_type <- train_obj$type
+  cov_mat_nr <- train_obj$nr
   d <- nrow(x_train)
   m <- ncol(x_train)
 
@@ -162,28 +170,27 @@ est_edd_all_methods <- function(train_obj, n_max, n_sim, edd_file, kappa, p, w,
   change_param <- set_change_param(change_type)
 
   # Method parameters
-  p0s <- c(0.03, 0.1, 0.3, 1)
-  r_pca <- c(1, 2, 3, 5, 10, 20)
   axes_max_pca <- lapply(r_pca, function(j) 1:j)
   axes_min_pca <- lapply(r_pca, function(j) (d - j + 1):d)
-  tpca_train_info <- get_tpca_train_info(cov_mat_type, change_type)
+  tpca_train_info <- get_tpca_train_info(cov_mat_nr, change_type)
   c_tpca <- tpca_train_info$cutoffs
   axes_tpca <- tpca_train_info$axes
 
   # Initialization
   sim_mixture_rl <- function(p0, x) {
-    threshold <- get_threshold(m, d, cov_mat_type, p0 = p0)
+    threshold <- get_threshold(m, d, cov_mat_nr, p0 = p0)
     mixture_rl(threshold, x_train, x, p0, kappa, w)
   }
+
   sim_tpca_rl <- function(axes, z) {
-    threshold <- get_threshold(m, d, cov_mat_type, axes = axes)
+    threshold <- get_threshold(m, d, cov_mat_nr, axes = axes)
     z_train_sub <- z_train[axes, , drop = FALSE]
     z_sub <- z[axes, , drop = FALSE]
     mixture_rl(threshold, z_train_sub, z_sub, 1, kappa, w)
   }
 
-  log_file <- set_log_name(cov_mat_type, change_type)
-  init_log_file(log_file)
+  log_file <- get_log_name(cov_mat_nr, change_type)
+  log_new_change(log_file)
   comp_cluster <- setup_parallel()
   `%dopar%` <- foreach::`%dopar%`
   all_run_lengths <- foreach::foreach(l = 1:n_sim) %dopar% {
