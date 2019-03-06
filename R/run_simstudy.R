@@ -23,12 +23,9 @@ run_simstudy <- function() {
   kappa <- 0
   # p <- rev(c(0.02, 0.05, 0.1, 0.3, 0.5, 0.7, 0.9, 0.95, 0.98))
   p <- c(0.9, 0.7, 0.5, 0.3, 0.1)
-  mu <- c(0.5, 0.7, 1, 1.3)
-  # mu <- 1
-  sigma <- c(0.5, 0.75, 1.5, 2)
-  # sigma <- 2
-  rho_scale <- c(0, 0.25, 0.5, 0.75)
-  # rho_scale <- 0
+  mu <- c(0.5, 0.7, 1)
+  sigma <- c(0.5, 1.5, 2)
+  rho_scale <- c(0, 0.5, 0.75)
   n_sim <- 500
   invisible(lapply(training_sets, edd_sim,
                    n_sim     = n_sim,
