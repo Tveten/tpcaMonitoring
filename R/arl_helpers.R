@@ -54,9 +54,9 @@ conf_int <- function(x, alpha = 0.05) {
 geom_conf_int <- function(mean_est, n, thresh_alpha) {
   p_est <- 1 / mean_est
   sd_est <- sqrt((1 - p_est) / p_est^2)
-  quartile <- qnorm((1 - thresh_alpha / 2))
-  lower <- mean_est - quartile * sd_est / sqrt(n)
-  upper <- mean_est + quartile * sd_est / sqrt(n)
+  percentile <- qnorm((1 - thresh_alpha / 2))
+  lower <- mean_est - percentile * sd_est / sqrt(n)
+  upper <- mean_est + percentile * sd_est / sqrt(n)
   conf_int <- c(floor(lower), ceiling(upper))
   return(conf_int)
 }
