@@ -1,0 +1,65 @@
+Data dimension             = 10
+Reduced dimension          = 3
+Axes                       = 8 9 10
+Number of training samples = 20
+Window length              = 200
+==========================================================
+Relative error tolerance: 0.200
+ 
+Currently: threshold = 12.6000 with 96 simulations
+Result:    ARL       = 107, 0.0 min used.
+Currently: threshold = 13.4310 with 96 simulations
+Result:    ARL       = 103, 0.1 min used.
+Currently: threshold = 14.3172 with 96 simulations
+Result:    ARL       = 110, 0.1 min used.
+Currently: threshold = 15.2612 with 96 simulations
+Result:    ARL       = 133, 0.2 min used.
+Currently: threshold = 16.2651 with 96 simulations
+Result:    ARL       = 133, 0.2 min used.
+Currently: threshold = 17.3350 with 96 simulations
+Result:    ARL       = 150, 0.3 min used.
+Currently: threshold = 18.4733 with 96 simulations
+Result:    ARL       = 155, 0.3 min used.
+Currently: threshold = 19.6858 with 96 simulations
+Result:    ARL       = 181, 0.3 min used.
+Currently: threshold = 20.9744 with 96 simulations
+Result:    ARL       = 178, 0.4 min used.
+Currently: threshold = 22.3478 with 96 simulations
+Result:    ARL       = 369, 0.4 min used.
+Currently: threshold = 23.7827 with 96 simulations
+Result:    ARL       = 320, 0.5 min used.
+Currently: threshold = 25.3174 with 96 simulations
+Result:    ARL       = 356, 0.5 min used.
+Currently: threshold = 26.9452 with 96 simulations
+Result:    ARL       = 400, 0.5 min used.
+Currently: threshold = 28.6697 with 96 simulations
+Result:    ARL       = 800, 0.6 min used.
+Currently: threshold = 30.4281 with 96 simulations
+Result:    ARL       = 1067, 0.6 min used.
+Currently: threshold = 32.2402 with 96 simulations
+Result:    ARL       = 1920, 0.7 min used.
+Currently: threshold = 33.9768 with 96 simulations
+Result:    ARL       = 1600, 0.7 min used.
+Currently: threshold = 35.8796 with 96 simulations
+Result:    ARL       = 4800, 0.8 min used.
+Currently: threshold = 37.1234 with 96 simulations
+Result:    ARL       = 4800, 0.8 min used.
+Currently: threshold = 38.4103 with 96 simulations
+Result:    ARL       = 1920, 0.9 min used.
+Currently: threshold = 40.4794 with 96 simulations
+Result:    ARL       = 9600, 0.9 min used.
+==========================================================
+Relative error tolerance: 0.100
+ 
+Currently: threshold = 40.4794 with 384 simulations
+Result:    ARL       = 19200, 1.0 min used.
+Currently: threshold = 39.2380 with 384 simulations
+Result:    ARL       = 6400, 1.0 min used.
+Currently: threshold = 39.7088 with 384 simulations
+Result:    ARL       = 12800, 1.1 min used.
+Currently: threshold = 39.3382 with 384 simulations
+Result:    ARL       = 3491, 1.2 min used.
+Currently: threshold = 40.1917 with 384 simulations
+Result:    ARL       = 7680, 1.3 min used.
+Currently: threshold = 40.5026 with 384 simulations
+Result:    ARL       = 9600, 1.3 min used.

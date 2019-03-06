@@ -1,0 +1,29 @@
+Data dimension             = 10
+Reduced dimension          = 3
+Axes                       = 1 2 3
+Number of training samples = 20
+Window length              = 200
+==========================================================
+Relative error tolerance: 0.200
+ 
+Currently: threshold = 12.6000 with 96 simulations
+Result:    ARL       = 873, 0.0 min used.
+Currently: threshold = 13.3667 with 96 simulations
+Result:    ARL       = 1067, 0.1 min used.
+Currently: threshold = 14.1627 with 96 simulations
+Result:    ARL       = 1200, 0.1 min used.
+Currently: threshold = 14.9936 with 96 simulations
+Result:    ARL       = 1920, 0.2 min used.
+Currently: threshold = 15.8012 with 96 simulations
+Result:    ARL       = 4800, 0.2 min used.
+Currently: threshold = 16.3490 with 96 simulations
+Result:    ARL       = 9600, 0.3 min used.
+==========================================================
+Relative error tolerance: 0.100
+ 
+Currently: threshold = 16.3490 with 384 simulations
+Result:    ARL       = 12800, 0.3 min used.
+Currently: threshold = 16.1964 with 384 simulations
+Result:    ARL       = 3491, 0.4 min used.
+Currently: threshold = 16.5478 with 384 simulations
+Result:    ARL       = 9600, 0.5 min used.
