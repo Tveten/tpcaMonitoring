@@ -1,7 +1,7 @@
-gen_train_dense <- function(d, m, seed, return_all = FALSE) {
+gen_train_dense <- function(d, m, seed, alphad = 1, return_all = FALSE) {
   set.seed(as.numeric(seed))
   mu <- rep(0, d)
-  Sigma <- tpca::rcor_mat(d)
+  Sigma <- tpca::rcor_mat(d, alphad = alphad)
   x <- gen_norm_data(m, mu, Sigma)
   if (return_all) return(list('x' = x, 'mu' = mu, 'Sigma' = Sigma,
                               'nr' = as.numeric(substr_right(seed, 2))))
@@ -48,5 +48,9 @@ get_train_sparse <- function(return_all = FALSE) {
 
 get_training_sets <- function(n_sets, d, m, return_all = TRUE) {
   seed_seq <- paste0(300, sprintf('%.2d', 1:n_sets))
-  lapply(seed_seq, function(s) gen_train_dense(d, m, s, return_all))
+  n_large_cor <- round(n_sets / 2)
+  n_small_cor <- n_sets - n_large_cor
+  alphad_seq <- c(seq(0.05, 0.95, length.out = n_large_cor),
+                  seq(1, 50, length.out = n_small_cor))
+  lapply(1:n_sets, function(i) gen_train_dense(d, m, seed_seq[i], alphad_seq[i], return_all))
 }
