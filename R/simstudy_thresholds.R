@@ -39,6 +39,8 @@ find_tpca_thresholds <- function(train_obj, n, alpha, rel_tol, r, cutoff) {
     unique_axes
   }
 
+  write_global_log(paste0('Finding tpca thresholds for cov_mat_nr ', train_obj$nr, '.'))
+
   x_train <- train_obj$x
   cov_mat_nr <- train_obj$nr
   m <- ncol(x_train)
@@ -54,6 +56,7 @@ find_tpca_thresholds <- function(train_obj, n, alpha, rel_tol, r, cutoff) {
 }
 
 find_mixture_thresholds <- function(train_obj, n, alpha, rel_tol, p0) {
+  write_global_log('Finding mixture thresholds.')
   x_train <- train_obj$x
   m <- ncol(x_train)
   d <- nrow(x_train)

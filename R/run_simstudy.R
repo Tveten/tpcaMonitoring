@@ -1,7 +1,23 @@
 run_simstudy <- function() {
-  n_sets <- 3
-  d <- 20
-  m <- 40
+  init_global_log <- function() {
+    alpha_str <- strsplit(as.character(alpha), '[.]')[[1]][2]
+    log_file_G <<- paste0('overall_log_', 'n', n, 'alpha', alpha_str,
+                               'm', m, 'd', d, 'txt')
+    start_time_G <<- Sys.time()
+    write(paste0('Simulation start at ', start_time_G), log_file_G, append = TRUE)
+
+    # Log every
+    #   - find_mixture_thresholds
+    #   - find_tpca_thresholds
+    #   - In edd_sim:
+    #      * run_mean_change_simulations
+    #      * run_sd_change_simulations
+    #      * run_cor_change_simulations
+  }
+
+  n_sets <- 30
+  d <- 100
+  m <- 200
   training_sets <- get_training_sets(n_sets, d = d, m = m)
 
   # Method parameters
@@ -38,3 +54,10 @@ run_simstudy <- function() {
                    r         = r,
                    threshold_settings = list('n' = n, 'alpha' = alpha)))
 }
+
+write_global_log <- function(text) {
+  # text indicates where the simulations are at.
+  curr_time <- Sys.time()
+  write(paste0(text, ' Current time: ', curr_time, '. Time used so far: ',
+               round(difftime(curr_time, start_time_G, units = 'hour'), 2), ' hours.'),
+        log_file_G, append = TRUE)

@@ -35,6 +35,7 @@ edd_sim <- function(train_obj, n_sim, kappa, p, mu, sigma, rho_scale,
   }
 
   run_mean_change_simulations <- function() {
+    write_global_log(paste0('Running EDD sims for changes in MEAN and cov_mat_nr ', train_obj$nr, '.'))
     for (i in 1:length(p)) {
       for (j in 1:length(mu)) {
         est_edd_all_methods(train_obj, n_max, n_sim, edd_mean_file,
@@ -45,6 +46,7 @@ edd_sim <- function(train_obj, n_sim, kappa, p, mu, sigma, rho_scale,
   }
 
   run_sd_change_simulations <- function() {
+    write_global_log(paste0('Running EDD sims for changes in VAR and cov_mat_nr ', train_obj$nr, '.'))
     for (i in seq_along(p)) {
       for (j in seq_along(sigma)) {
         est_edd_all_methods(train_obj, n_max, n_sim, edd_sd_file,
@@ -58,6 +60,7 @@ edd_sim <- function(train_obj, n_sim, kappa, p, mu, sigma, rho_scale,
     # Since we only study decreases in correlation, only the correlated
     # dimensions can be changed. Hence, it's no point in running p for larger
     # values than the proportion of correlated dimensions.
+    write_global_log(paste0('Running EDD sims for changes in COR and cov_mat_nr ', train_obj$nr, '.'))
     n_dims_cor <- length(attr(train_obj$Sigma, 'which_dims_cor'))
     d <- ncol(train_obj$Sigma)
     prop_cor_dims <- n_dims_cor / d
@@ -75,14 +78,6 @@ edd_sim <- function(train_obj, n_sim, kappa, p, mu, sigma, rho_scale,
   # Simulation setup
   w <- 200
   n_max <- 2000
-  # n_sim <- 500
-
-  # Change scenarios
-  # kappa <- 0
-  # p <- rev(c(0.02, 0.05, 0.1, 0.3, 0.5, 0.7, 0.9, 0.95, 0.98))
-  # mu <- c(0.5, 0.7, 1, 1.3)
-  # sigma <- c(0.5, 0.75, 1.5, 2)
-  # rho_scale <- c(0, 0.25, 0.5, 0.75)
 
   # File setup
   cov_mat_nr <- train_obj$nr
