@@ -36,7 +36,9 @@ find_tpca_thresholds <- function(train_obj, n, alpha, rel_tol, r, cutoff) {
     }
     axes_list <- unlist(axes_list, recursive = FALSE)
     unique_axes <- unique_vectors(axes_list)
-    unique_axes
+    print(unique_axes)
+    print(unique_axes[-(1:(2*length(r)))])
+    unique_axes[-(1:(2*length(r)))]
   }
 
   write_global_log(paste0('Finding tpca thresholds for cov_mat_nr ', train_obj$nr, '.'))
@@ -46,10 +48,12 @@ find_tpca_thresholds <- function(train_obj, n, alpha, rel_tol, r, cutoff) {
   m <- ncol(x_train)
   d <- nrow(x_train)
   cov_mat <- 1 / (m - 1) * x_train %*% t(x_train)
-  max_axes <- round(d / 5)
+  max_axes <- min(40, round(d / 5))
   axes_list <- get_axes_list()
 
   for (i in seq_along(axes_list))
+    write_global_log(paste0('Finding tpca thresholds for axis ', i,
+                            ' of ', length(axes_list), '.'))
     threshold_finder(x_train, 'tpca', n, alpha, axes = axes_list[[i]],
                      rel_tol = rel_tol,
                      file_id = paste0(cov_mat_nr, '_'))
@@ -60,13 +64,13 @@ find_mixture_thresholds <- function(train_obj, n, alpha, rel_tol, p0) {
   x_train <- train_obj$x
   m <- ncol(x_train)
   d <- nrow(x_train)
-  # init_thresh <- c(30, 50, 80)
+  init_thresh <- c(40, 65, 100, 160)
 
   for (i in seq_along(p0))
-    threshold_finder(x_train, 'mixture', n, alpha, p0 = p0[i], rel_tol = rel_tol)
-    # threshold_finder(x_train, 'mixture', n, alpha, p0 = p0[i],
-    #                  init_thresh   = init_thresh[i],
-    #                  learning_coef = 10)
+    threshold_finder(x_train, 'mixture', n, alpha, p0 = p0[i],
+                     rel_tol = rel_tol,
+                     init_thresh   = init_thresh[i],
+                     learning_coef = 10)
 }
 
 find_all_thresholds <- function(training_sets, n, alpha, rel_tol, p0, r, cutoff) {
@@ -148,33 +152,4 @@ extract_final_thresholds <- function(d, m, n, alpha,
       }
     }
   }
-}
-
-run_threshold_finder_dense <- function() {
-  find_tpca_thresholds(get_train_dense(), 'dense')
-}
-
-run_threshold_finder_halfsparse <- function() {
-  find_tpca_thresholds(get_train_halfsparse(), 'halfsparse')
-}
-
-run_threshold_finder_sparse <- function() {
-  find_tpca_thresholds(get_train_sparse(), 'sparse')
-}
-
-run_threshold_finder_mixture <- function() {
-  # The dimension of all the training sets are the same,
-  # so any of them can be input below with the same result.
-  find_mixture_thresholds(get_train_dense())
-}
-
-run_all_threshold_finders <- function() {
-  run_threshold_finder_dense()
-  run_threshold_finder_halfsparse()
-  run_threshold_finder_sparse()
-}
-
-run_selected_threshold_finders <- function() {
-  run_threshold_finder_mixture()
-  run_threshold_finder_sparse()
 }

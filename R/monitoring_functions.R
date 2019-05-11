@@ -2,7 +2,7 @@
 #' @importFrom Rcpp sourceCpp
 NULL
 
-mixture_rl <- function(threshold, x_train, x, p0, kappa, w) {
+mixture_rl <- function(threshold, x_train, x, p0, w) {
   m <- ncol(x_train)
   n_max <- ncol(x)
 
@@ -15,9 +15,7 @@ mixture_rl <- function(threshold, x_train, x, p0, kappa, w) {
     log_liks <- mixture_log_liksC(sums, m, t, w, p0)
     detection_stat <- max(log_liks)
   }
-  if (kappa == Inf) run_length <- t
-  else run_length <- t - kappa
-  run_length
+  t
 }
 
 init_sums <- function(x_train, x_1, n_max) {
@@ -27,7 +25,7 @@ init_sums <- function(x_train, x_1, n_max) {
                'v' = matrix(0, nrow = d, ncol = n_max + 1))
   sums$u[, 1] <- rowSums(x_train)
   sums$v[, 1] <- (m - 1) * rowVars(x_train)
-  update_sums(sums, x_1, m, 1)
+  update_sumsC(sums, x_1, m, 1)
 }
 
 bartlett_corr <- function(m, t, k) {

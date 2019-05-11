@@ -15,7 +15,7 @@ first_up <- function(x) {
 
 setup_parallel <- function() {
   n_cores <- parallel::detectCores()
-  c <- parallel::makeCluster(n_cores - 1, outfile = '', type = 'PSOCK')
+  c <- parallel::makeCluster(n_cores, outfile = '', type = 'PSOCK')
   doParallel::registerDoParallel(c)
   c
 }
@@ -51,4 +51,3 @@ list_files_matching <- function(path, ...) {
   expr <- paste(paste0('(?=.*', dots, ')'), collapse = '')
   dir(path)[grepl(expr, dir(path), perl = TRUE)]
 }
-

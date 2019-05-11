@@ -35,6 +35,9 @@
 #' @param learning_coef The learning rate is defined as \code{rel_tol} /
 #' \code{learning_coef}. The default \code{learning_coef} is 3, which has
 #' been found a good choice after a lot of experimenting.
+#' @param file_id A string that identifies the files associated with the particular
+#' threshold beyond the data dimension d, axes/p0, training size m or
+#' probability of false alarm alpha.
 #'
 #' @return A list with the following components:
 #' \describe{
@@ -207,7 +210,7 @@ threshold_finder <- function(x, mon_type, n, alpha,
   # When rel_tol is low, the algorithm might jump back and forth over the true
   # value. Thus, it should be stopped at some point. Too many runs on the final
   # stage is not worth it.
-  max_retries <- max(5, round(20 - 1 / 4 * mon_dim))
+  max_retries <- max(8, round(20 - 1 / 4 * mon_dim))
   n_retries <- 1
   for (k in 1:length(n_sim)) {
     arl_conf_int <- c(0, 0)
@@ -227,4 +230,18 @@ threshold_finder <- function(x, mon_type, n, alpha,
     }
   }
   threshold
+}
+
+conf_int <- function(x, alpha = 0.05) {
+  ci <- quantile(x, probs = c(alpha / 2, (1 - alpha) / 2))
+}
+
+geom_conf_int <- function(mean_est, n, thresh_alpha) {
+  p_est <- 1 / mean_est
+  sd_est <- sqrt((1 - p_est) / p_est^2)
+  percentile <- qnorm((1 - thresh_alpha / 2))
+  lower <- mean_est - percentile * sd_est / sqrt(n)
+  upper <- mean_est + percentile * sd_est / sqrt(n)
+  conf_int <- c(floor(lower), ceiling(upper))
+  return(conf_int)
 }

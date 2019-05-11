@@ -6,7 +6,7 @@
 \usage{
 threshold_finder(x, mon_type, n, alpha, axes = NULL, p0 = NULL,
   w = 200, rel_tol = c(0.2, 0.1, 0.05, 0.025), thresh_alpha = 0.05,
-  init_thresh = NULL, learning_coef = NULL)
+  init_thresh = NULL, learning_coef = NULL, file_id = NULL)
 }
 \arguments{
 \item{x}{The d x m training data matrix, where d is the dimension of the data
@@ -37,6 +37,10 @@ allowed at each step towards convergence in the algorithm. See details.}
 \item{learning_coef}{The learning rate is defined as \code{rel_tol} /
 \code{learning_coef}. The default \code{learning_coef} is 3, which has
 been found a good choice after a lot of experimenting.}
+
+\item{file_id}{A string that identifies the files associated with the particular
+threshold beyond the data dimension d, axes/p0, training size m or
+probability of false alarm alpha.}
 }
 \value{
 A list with the following components:

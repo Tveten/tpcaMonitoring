@@ -1,6 +1,10 @@
-generate_cor_data <- function(d, n, mu0, Sigma0,
-                              kappa = 0, p = 0,
-                              mu = NULL, sigma = NULL, rho_scale = NULL) {
+gen_norm_data <- function(n, mu, Sigma) {
+  t(MASS::mvrnorm(n, mu = mu, Sigma = Sigma))
+}
+
+gen_changed_data <- function(d, n, mu0, Sigma0,
+                             kappa = 0, p = 0,
+                             mu = NULL, sigma = NULL, rho_scale = NULL) {
 
   change_mu <- function(mu0, mu, D) {
     if (!is.null(mu)) {
@@ -51,6 +55,50 @@ generate_cor_data <- function(d, n, mu0, Sigma0,
   return(x)
 }
 
-gen_norm_data <- function(n, mu, Sigma) {
-  t(MASS::mvrnorm(n, mu = mu, Sigma = Sigma))
+#' Generate multivariate normal training data.
+#'
+#' @param d The data dimension
+#' @param m The number of training samples.
+#' @param seed The seed to be used.
+#' @param alphad The value of alpha_d in \code{\link{tpca::rcor_mat}}. A high
+#' value means low correlations and vice versa.
+#' @param return_all A logical value. If FALSE: Only returns the data matrix x.
+#' If TRUE: Returns a list with 'x', 'mu', 'Sigma' and 'nr', where
+#' 'mu' is the mean vector used, 'Sigma' is the covariance matrix and 'nr' indicates
+#' which seed that was used.
+#'
+#' @return See the argument return_all.
+#'
+#' @export
+gen_train <- function(d, m, seed, alphad = 1, return_all = FALSE) {
+  set.seed(as.numeric(seed))
+  mu <- rep(0, d)
+  Sigma <- tpca::rcor_mat(d, alphad = alphad)
+  x <- gen_norm_data(m, mu, Sigma)
+  if (return_all) return(list('x' = x, 'mu' = mu, 'Sigma' = Sigma,
+                              'nr' = as.numeric(substr_right(seed, 2))))
+  else return(x)
+}
+
+#' Generate multivariate normal training data.
+#'
+#' @param n_sets The number of training sets to be generated.
+#' @param d The data dimension.
+#' @param m The number of training samples.
+#' @param return_all A logical value. If FALSE: Only returns the data matrix x.
+#' If TRUE: Returns a list with 'x', 'mu', 'Sigma' and 'nr', where
+#' 'mu' is the mean vector used, 'Sigma' is the covariance matrix and 'nr' indicates
+#' which seed that was used.
+#'
+#' @return A list of training sets from \code{\link{gen_train}}.
+#' The argument return_all determines the type of each list element.
+#'
+#' @export
+get_training_sets <- function(n_sets, d, m, return_all = TRUE) {
+  seed_seq <- paste0(300, sprintf('%.2d', 1:n_sets))
+  n_large_cor <- round(n_sets / 2)
+  n_small_cor <- n_sets - n_large_cor
+  alphad_seq <- c(seq(0.05, 0.95, length.out = n_large_cor),
+                  seq(1, 50, length.out = n_small_cor))
+  lapply(1:n_sets, function(i) gen_train(d, m, seed_seq[i], alphad_seq[i], return_all))
 }
