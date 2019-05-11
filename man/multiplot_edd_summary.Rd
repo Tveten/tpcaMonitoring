@@ -2,7 +2,7 @@
 % Please edit documentation in R/edd_figures.R
 \name{multiplot_edd_summary}
 \alias{multiplot_edd_summary}
-\title{Plot EDDS results.}
+\title{Plot EDD results.}
 \usage{
 multiplot_edd_summary(n = 100, alpha = 0.01, m = 200, d = 100,
   cov_mat_nr = NULL, cov_mat_type = NULL, change_params = NULL,
@@ -28,7 +28,10 @@ correlation or high correlation matrices.}
 }
 \description{
 \code{multiplot_edd_summary} creates a grid of plots with results from
-running \code{\link{run_simstudy}}
+running \code{\link{run_simstudy}}. WARNING: Before running this function
+your must either have run \code{run_simstudy} yourself, or have downloaded
+the results/ and thresholds/ directories from https://github.com/Tveten/tpcaMonitoring
+and put them in your working directory.
 }
 \examples{
 # Plot of the results for low correlation matrices:

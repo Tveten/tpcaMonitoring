@@ -284,10 +284,13 @@ ggplot_edd <- function(edd_list, change_type, change_param, ylim = c(0, 2000)) {
     ggplot2::scale_linetype_manual(values = rep(1, length(unique(edd_df$method_param))), guide = FALSE)
 }
 
-#' Plot EDDS results.
+#' Plot EDD results.
 #'
 #' \code{multiplot_edd_summary} creates a grid of plots with results from
-#' running \code{\link{run_simstudy}}
+#' running \code{\link{run_simstudy}}. WARNING: Before running this function
+#' your must either have run \code{run_simstudy} yourself, or have downloaded
+#' the results/ and thresholds/ directories from https://github.com/Tveten/tpcaMonitoring
+#' and put them in your working directory.
 #'
 #' @param n The monitoring length the probability of false alarm is controlled for.
 #' @param alpha The probability of false alarms
@@ -373,6 +376,10 @@ save_summary_plot <- function(n, alpha, m, d,
 #'
 #' See the documentation for \code{\link{multiplot_edd_summary}} for an explanation
 #' of the arguments. The additional ones are described here.
+#' WARNING: Before running this function
+#' your must either have run \code{run_simstudy} yourself, or have downloaded
+#' the results/ and thresholds/ directories from https://github.com/Tveten/tpcaMonitoring
+#' and put them in your working directory.
 #'
 #' @param change_type Either 'mean', 'sd' or 'cor'
 #' @param change_param A numeric specifying the change size for the chosen change_type.

@@ -16,4 +16,8 @@ ggplot_edd_conf_int(n, alpha, m, d, change_type, change_param,
 \description{
 See the documentation for \code{\link{multiplot_edd_summary}} for an explanation
 of the arguments. The additional ones are described here.
+WARNING: Before running this function
+your must either have run \code{run_simstudy} yourself, or have downloaded
+the results/ and thresholds/ directories from https://github.com/Tveten/tpcaMonitoring
+and put them in your working directory.
 }
