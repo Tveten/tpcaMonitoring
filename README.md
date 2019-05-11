@@ -76,9 +76,6 @@ multiplot_edd_summary(cov_mat_nr = 5)
 # Plot EDD results with confidence intervals:
 ggplot_edd_conf_int(n = 100, alpha = 0.01, m = 200, d = 100,
                     change_type = 'sd', change_param = 1.5)
-#> Warning: position_dodge requires non-overlapping x intervals
-
-#> Warning: position_dodge requires non-overlapping x intervals
 ```
 
 ![](README-fig4-1.png)

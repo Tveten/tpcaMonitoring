@@ -462,17 +462,18 @@ ggplot_edd_conf_int <- function(n, alpha, m, d, change_type, change_param,
   col <- set_col(methods)
   labels <- set_labels(methods)
   title <- set_title(change_type)
-  pd <- ggplot2::position_dodge(0.05)
+  pd <- suppressWarnings(ggplot2::position_dodge(0.05))
 
-  ggplot2::ggplot(edd_subset, ggplot2::aes(x = p, y = edd, color = Lmethod, linetype = method_param)) +
-    ggplot2::geom_errorbar(ggplot2::aes(ymin = edd - ci, ymax = edd + ci),
-                           width = 0.5, position = pd) +
+  suppressWarnings(ggplot2::ggplot(edd_subset, ggplot2::aes(x = p, y = edd, color = Lmethod, linetype = method_param)) +
+    ggplot2::geom_errorbar(ggplot2::aes(ymin = edd - ci,
+                                                         ymax = edd + ci),
+                                            width = 0.5, position = pd) +
     ggplot2::geom_line(position = pd) +
     ggplot2::theme_light() +
     ggplot2::labs(title = title, x = 'log(p)', y = 'EDD') +
     ggplot2::coord_cartesian(ylim = ylim) +
     ggplot2::scale_color_manual('', values = col, labels = labels) +
-    ggplot2::scale_linetype_manual(values = rep(1, length(unique(edd_df$method_param))), guide = FALSE)
+    ggplot2::scale_linetype_manual(values = rep(1, length(unique(edd_df$method_param))), guide = FALSE))
 }
 
 multiplot_ci <- function(n, alpha, m, d, change_param,
