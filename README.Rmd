@@ -16,10 +16,10 @@ knitr::opts_chunk$set(
 ```
 
 # tpcaMonitoring
-An `R` package containing all code to reproduce the results in the paper
+An `R` package containing all code to reproduce the simulation study of the paper
 "Online Detection of Sparse Changes in High-Dimensional Data Streams Using Tailored Projections".
 In addition, the package contains the files with the results we obtained by
-running the simulation study.
+running the simulation study in the directories /results and /thresholds.
 It is also an aim that this package can be used by others who want to test TPCA
 for their monitoring tasks, both for bootstrapping thresholds and testing performance
 in terms of expected detection delays (EDD).
@@ -42,8 +42,13 @@ You can install tpcaMonitoring from github with:
 devtools::install_github("Tveten/tpcaMonitoring")
 ```
 
+To reproduce figures from our result files, download the folders /results and
+/thresholds from https://github.com/Tveten/tpcaMonitoring and put them in your
+working R directory before running the plot functions.
+
 ## Exported and documented functions
 For more information, see the documentation of the functions below inside R.
+
 * est_edd_all_methods
 * gen_train
 * get_training_sets
@@ -53,7 +58,6 @@ For more information, see the documentation of the functions below inside R.
 * run_simstudy
 * threshold_finder
 * tpca_arl
-
 
 ## Example
 

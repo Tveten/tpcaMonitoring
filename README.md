@@ -3,7 +3,7 @@
 tpcaMonitoring
 ==============
 
-An `R` package containing all code to reproduce the results in the paper "Online Detection of Sparse Changes in High-Dimensional Data Streams Using Tailored Projections". In addition, the package contains the files with the results we obtained by running the simulation study. It is also an aim that this package can be used by others who want to test TPCA for their monitoring tasks, both for bootstrapping thresholds and testing performance in terms of expected detection delays (EDD).
+An `R` package containing all code to reproduce the simulation study of the paper "Online Detection of Sparse Changes in High-Dimensional Data Streams Using Tailored Projections". In addition, the package contains the files with the results we obtained by running the simulation study in the directories /results and /thresholds. It is also an aim that this package can be used by others who want to test TPCA for their monitoring tasks, both for bootstrapping thresholds and testing performance in terms of expected detection delays (EDD).
 
 Overview
 --------
@@ -26,10 +26,22 @@ You can install tpcaMonitoring from github with:
 devtools::install_github("Tveten/tpcaMonitoring")
 ```
 
+To reproduce figures from our result files, download the folders /results and /thresholds from <https://github.com/Tveten/tpcaMonitoring> and put them in your working R directory before running the plot functions.
+
 Exported and documented functions
 ---------------------------------
 
-For more information, see the documentation of the functions below inside R. \* est\_edd\_all\_methods \* gen\_train \* get\_training\_sets \* ggplot\_edd\_conf\_int \* mixture\_arl \* multiplot\_edd\_summary \* run\_simstudy \* threshold\_finder \* tpca\_arl
+For more information, see the documentation of the functions below inside R.
+
+-   est\_edd\_all\_methods
+-   gen\_train
+-   get\_training\_sets
+-   ggplot\_edd\_conf\_int
+-   mixture\_arl
+-   multiplot\_edd\_summary
+-   run\_simstudy
+-   threshold\_finder
+-   tpca\_arl
 
 Example
 -------
