@@ -1,0 +1,18 @@
+mean_only 0.8 99 100 97 98 96
+mean_only 0.9 99 100 97 98 96 95
+mean_only 0.95 99 100 97 98 96 95 94
+mean_only 0.99 99 100 97 98 96 95 94 91 93 92
+mean_only 0.995 99 100 97 98 96 95 94 91 93 92 90
+mean_only 0.999 99 100 97 98 96 95 94 91 93 92 90
+sd_only 0.8 100
+sd_only 0.9 100
+sd_only 0.95 100
+sd_only 0.99 100
+sd_only 0.995 100
+sd_only 0.999 100 99
+cor_only 0.8 100
+cor_only 0.9 100
+cor_only 0.95 100
+cor_only 0.99 100
+cor_only 0.995 100
+cor_only 0.999 100

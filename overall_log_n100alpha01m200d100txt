@@ -1,0 +1,130 @@
+Simulation start at 2019-03-11 11:43:26
+Finding tpca thresholds for cov_mat_nr 1. Current time: 2019-03-11 11:43:26. Time used so far: 0 hours.
+Finding tpca thresholds for cov_mat_nr 2. Current time: 2019-03-11 14:26:27. Time used so far: 2.72 hours.
+Finding tpca thresholds for cov_mat_nr 3. Current time: 2019-03-11 16:51:10. Time used so far: 5.13 hours.
+Finding tpca thresholds for cov_mat_nr 4. Current time: 2019-03-11 19:13:40. Time used so far: 7.5 hours.
+Finding tpca thresholds for cov_mat_nr 5. Current time: 2019-03-11 21:55:23. Time used so far: 10.2 hours.
+Finding tpca thresholds for cov_mat_nr 6. Current time: 2019-03-12 00:36:02. Time used so far: 12.88 hours.
+Finding tpca thresholds for cov_mat_nr 7. Current time: 2019-03-12 03:29:00. Time used so far: 15.76 hours.
+Finding tpca thresholds for cov_mat_nr 8. Current time: 2019-03-12 06:43:22. Time used so far: 19 hours.
+Finding tpca thresholds for cov_mat_nr 9. Current time: 2019-03-12 09:40:17. Time used so far: 21.95 hours.
+Finding tpca thresholds for cov_mat_nr 10. Current time: 2019-03-12 12:15:04. Time used so far: 24.53 hours.
+Finding tpca thresholds for cov_mat_nr 11. Current time: 2019-03-12 14:22:17. Time used so far: 26.65 hours.
+Finding tpca thresholds for cov_mat_nr 12. Current time: 2019-03-12 17:14:16. Time used so far: 29.51 hours.
+Finding tpca thresholds for cov_mat_nr 13. Current time: 2019-03-12 19:57:18. Time used so far: 32.23 hours.
+Finding tpca thresholds for cov_mat_nr 14. Current time: 2019-03-12 22:41:14. Time used so far: 34.96 hours.
+Finding tpca thresholds for cov_mat_nr 15. Current time: 2019-03-13 01:32:00. Time used so far: 37.81 hours.
+Finding tpca thresholds for cov_mat_nr 16. Current time: 2019-03-13 03:41:30. Time used so far: 39.97 hours.
+Finding tpca thresholds for cov_mat_nr 17. Current time: 2019-03-13 05:54:24. Time used so far: 42.18 hours.
+Finding tpca thresholds for cov_mat_nr 18. Current time: 2019-03-13 09:51:03. Time used so far: 46.13 hours.
+Finding tpca thresholds for cov_mat_nr 19. Current time: 2019-03-13 13:07:55. Time used so far: 49.41 hours.
+Finding tpca thresholds for cov_mat_nr 20. Current time: 2019-03-13 16:34:27. Time used so far: 52.85 hours.
+Finding tpca thresholds for cov_mat_nr 21. Current time: 2019-03-13 20:11:38. Time used so far: 56.47 hours.
+Finding tpca thresholds for cov_mat_nr 22. Current time: 2019-03-13 23:41:19. Time used so far: 59.96 hours.
+Finding tpca thresholds for cov_mat_nr 23. Current time: 2019-03-14 03:04:44. Time used so far: 63.36 hours.
+Finding tpca thresholds for cov_mat_nr 24. Current time: 2019-03-14 07:15:03. Time used so far: 67.53 hours.
+Finding tpca thresholds for cov_mat_nr 25. Current time: 2019-03-14 11:12:25. Time used so far: 71.48 hours.
+Simulation start at 2019-03-15 09:45:33
+Finding tpca thresholds for cov_mat_nr 25. Current time: 2019-03-15 09:45:33. Time used so far: 0 hours.
+Finding tpca thresholds for cov_mat_nr 26. Current time: 2019-03-15 13:22:33. Time used so far: 3.62 hours.
+Finding tpca thresholds for cov_mat_nr 27. Current time: 2019-03-15 16:24:42. Time used so far: 6.65 hours.
+Finding tpca thresholds for cov_mat_nr 28. Current time: 2019-03-15 20:23:21. Time used so far: 10.63 hours.
+Finding tpca thresholds for cov_mat_nr 29. Current time: 2019-03-16 00:36:32. Time used so far: 14.85 hours.
+Simulation start at 2019-03-18 08:39:39
+Running EDD sims for changes in MEAN and cov_mat_nr 1. Current time: 2019-03-18 08:39:43. Time used so far: 0 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 1. Current time: 2019-03-18 10:06:52. Time used so far: 1.45 hours.
+Running EDD sims for changes in COR and cov_mat_nr 1. Current time: 2019-03-18 13:13:41. Time used so far: 4.57 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 2. Current time: 2019-03-18 14:44:20. Time used so far: 6.08 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 2. Current time: 2019-03-18 16:40:28. Time used so far: 8.01 hours.
+Running EDD sims for changes in COR and cov_mat_nr 2. Current time: 2019-03-18 19:44:46. Time used so far: 11.09 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 3. Current time: 2019-03-18 21:28:02. Time used so far: 12.81 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 3. Current time: 2019-03-18 23:13:43. Time used so far: 14.57 hours.
+Running EDD sims for changes in COR and cov_mat_nr 3. Current time: 2019-03-19 02:24:44. Time used so far: 17.75 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 4. Current time: 2019-03-19 03:53:39. Time used so far: 19.23 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 4. Current time: 2019-03-19 05:02:17. Time used so far: 20.38 hours.
+Running EDD sims for changes in COR and cov_mat_nr 4. Current time: 2019-03-19 08:02:59. Time used so far: 23.39 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 5. Current time: 2019-03-19 08:57:20. Time used so far: 24.29 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 5. Current time: 2019-03-19 10:09:36. Time used so far: 25.5 hours.
+Running EDD sims for changes in COR and cov_mat_nr 5. Current time: 2019-03-19 13:03:54. Time used so far: 28.4 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 6. Current time: 2019-03-19 14:04:56. Time used so far: 29.42 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 6. Current time: 2019-03-19 15:19:09. Time used so far: 30.66 hours.
+Running EDD sims for changes in COR and cov_mat_nr 6. Current time: 2019-03-19 18:05:42. Time used so far: 33.43 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 7. Current time: 2019-03-19 19:21:11. Time used so far: 34.69 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 7. Current time: 2019-03-19 20:06:19. Time used so far: 35.44 hours.
+Running EDD sims for changes in COR and cov_mat_nr 7. Current time: 2019-03-19 22:41:30. Time used so far: 38.03 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 8. Current time: 2019-03-19 23:29:38. Time used so far: 38.83 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 8. Current time: 2019-03-20 00:42:50. Time used so far: 40.05 hours.
+Running EDD sims for changes in COR and cov_mat_nr 8. Current time: 2019-03-20 03:44:07. Time used so far: 43.07 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 9. Current time: 2019-03-20 04:56:49. Time used so far: 44.29 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 9. Current time: 2019-03-20 06:26:22. Time used so far: 45.78 hours.
+Running EDD sims for changes in COR and cov_mat_nr 9. Current time: 2019-03-20 09:34:44. Time used so far: 48.92 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 10. Current time: 2019-03-20 11:12:18. Time used so far: 50.54 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 10. Current time: 2019-03-20 12:26:23. Time used so far: 51.78 hours.
+Running EDD sims for changes in COR and cov_mat_nr 10. Current time: 2019-03-20 15:34:49. Time used so far: 54.92 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 11. Current time: 2019-03-20 17:01:08. Time used so far: 56.36 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 11. Current time: 2019-03-20 17:58:43. Time used so far: 57.32 hours.
+Running EDD sims for changes in COR and cov_mat_nr 11. Current time: 2019-03-20 20:31:43. Time used so far: 59.87 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 12. Current time: 2019-03-20 21:34:35. Time used so far: 60.92 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 12. Current time: 2019-03-20 22:43:15. Time used so far: 62.06 hours.
+Running EDD sims for changes in COR and cov_mat_nr 12. Current time: 2019-03-21 01:26:35. Time used so far: 64.78 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 13. Current time: 2019-03-21 02:03:41. Time used so far: 65.4 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 13. Current time: 2019-03-21 03:02:04. Time used so far: 66.37 hours.
+Running EDD sims for changes in COR and cov_mat_nr 13. Current time: 2019-03-21 05:34:01. Time used so far: 68.91 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 14. Current time: 2019-03-21 06:33:00. Time used so far: 69.89 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 14. Current time: 2019-03-21 07:50:08. Time used so far: 71.17 hours.
+Running EDD sims for changes in COR and cov_mat_nr 14. Current time: 2019-03-21 10:38:24. Time used so far: 73.98 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 15. Current time: 2019-03-21 11:56:26. Time used so far: 75.28 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 15. Current time: 2019-03-21 13:15:13. Time used so far: 76.59 hours.
+Running EDD sims for changes in COR and cov_mat_nr 15. Current time: 2019-03-21 16:18:40. Time used so far: 79.65 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 16. Current time: 2019-03-21 17:19:33. Time used so far: 80.66 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 16. Current time: 2019-03-21 19:21:11. Time used so far: 82.69 hours.
+Running EDD sims for changes in COR and cov_mat_nr 16. Current time: 2019-03-21 22:25:42. Time used so far: 85.77 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 17. Current time: 2019-03-22 00:14:47. Time used so far: 87.59 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 17. Current time: 2019-03-22 01:41:01. Time used so far: 89.02 hours.
+Running EDD sims for changes in COR and cov_mat_nr 17. Current time: 2019-03-22 05:11:18. Time used so far: 92.53 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 18. Current time: 2019-03-22 06:55:01. Time used so far: 94.26 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 18. Current time: 2019-03-22 08:44:20. Time used so far: 96.08 hours.
+Running EDD sims for changes in COR and cov_mat_nr 18. Current time: 2019-03-22 12:56:45. Time used so far: 100.29 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 19. Current time: 2019-03-22 14:34:46. Time used so far: 101.92 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 19. Current time: 2019-03-22 15:33:30. Time used so far: 102.9 hours.
+Running EDD sims for changes in COR and cov_mat_nr 19. Current time: 2019-03-22 19:58:29. Time used so far: 107.31 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 20. Current time: 2019-03-22 22:33:42. Time used so far: 109.9 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 20. Current time: 2019-03-23 01:00:27. Time used so far: 112.35 hours.
+Running EDD sims for changes in COR and cov_mat_nr 20. Current time: 2019-03-23 06:32:20. Time used so far: 117.88 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 21. Current time: 2019-03-23 10:09:58. Time used so far: 121.51 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 21. Current time: 2019-03-23 12:01:44. Time used so far: 123.37 hours.
+Running EDD sims for changes in COR and cov_mat_nr 21. Current time: 2019-03-23 17:11:40. Time used so far: 128.53 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 22. Current time: 2019-03-23 19:32:28. Time used so far: 130.88 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 22. Current time: 2019-03-23 21:37:36. Time used so far: 132.97 hours.
+Running EDD sims for changes in COR and cov_mat_nr 22. Current time: 2019-03-24 03:44:49. Time used so far: 139.09 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 23. Current time: 2019-03-24 07:35:31. Time used so far: 142.93 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 23. Current time: 2019-03-24 08:33:17. Time used so far: 143.89 hours.
+Running EDD sims for changes in COR and cov_mat_nr 23. Current time: 2019-03-24 13:34:54. Time used so far: 148.92 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 24. Current time: 2019-03-24 14:48:37. Time used so far: 150.15 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 24. Current time: 2019-03-24 16:36:50. Time used so far: 151.95 hours.
+Running EDD sims for changes in COR and cov_mat_nr 24. Current time: 2019-03-24 23:36:15. Time used so far: 158.94 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 25. Current time: 2019-03-25 02:24:16. Time used so far: 161.74 hours.
+Simulation start at 2019-03-25 08:28:11
+Running EDD sims for changes in MEAN and cov_mat_nr 25. Current time: 2019-03-25 08:28:11. Time used so far: 0 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 25. Current time: 2019-03-25 10:28:52. Time used so far: 2.01 hours.
+Running EDD sims for changes in COR and cov_mat_nr 25. Current time: 2019-03-25 16:16:14. Time used so far: 7.8 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 26. Current time: 2019-03-25 17:22:56. Time used so far: 8.91 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 26. Current time: 2019-03-25 19:07:17. Time used so far: 10.65 hours.
+Running EDD sims for changes in COR and cov_mat_nr 26. Current time: 2019-03-26 01:08:15. Time used so far: 16.67 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 27. Current time: 2019-03-26 02:49:00. Time used so far: 18.35 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 27. Current time: 2019-03-26 04:25:13. Time used so far: 19.95 hours.
+Running EDD sims for changes in COR and cov_mat_nr 27. Current time: 2019-03-26 11:10:06. Time used so far: 26.7 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 28. Current time: 2019-03-26 13:09:10. Time used so far: 28.68 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 28. Current time: 2019-03-26 14:58:47. Time used so far: 30.51 hours.
+Running EDD sims for changes in COR and cov_mat_nr 28. Current time: 2019-03-26 21:53:44. Time used so far: 37.43 hours.
+Simulation start at 2019-03-27 08:53:46
+Finding mixture thresholds. Current time: 2019-03-27 08:53:46. Time used so far: 0 hours.
+Simulation start at 2019-03-27 08:57:24
+Finding tpca thresholds for cov_mat_nr 29. Current time: 2019-03-27 08:57:24. Time used so far: 0 hours.
+Finding tpca thresholds for cov_mat_nr 30. Current time: 2019-03-27 12:39:00. Time used so far: 3.69 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 29. Current time: 2019-03-27 16:23:09. Time used so far: 7.43 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 29. Current time: 2019-03-27 18:09:34. Time used so far: 9.2 hours.
+Running EDD sims for changes in COR and cov_mat_nr 29. Current time: 2019-03-28 01:02:05. Time used so far: 16.08 hours.
+Running EDD sims for changes in MEAN and cov_mat_nr 30. Current time: 2019-03-28 02:16:45. Time used so far: 17.32 hours.
+Running EDD sims for changes in VAR and cov_mat_nr 30. Current time: 2019-03-28 03:51:53. Time used so far: 18.91 hours.
+Running EDD sims for changes in COR and cov_mat_nr 30. Current time: 2019-03-28 10:00:22. Time used so far: 25.05 hours.
